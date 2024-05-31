@@ -168,7 +168,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             lastScanLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
             lastScanLabel.topAnchor.constraint(equalTo: scanTypeLabel.bottomAnchor, constant: 50),
             lastScanTitleLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
-            lastScanTitleLabel.bottomAnchor.constraint(equalTo: lastScanLabel.topAnchor, constant: 5)
+            lastScanTitleLabel.bottomAnchor.constraint(equalTo: lastScanLabel.topAnchor, constant: -6)
         ])
     }
 
