@@ -17,7 +17,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     let scanEntryLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "ENTRY"
+        label.text = "PARTICIPANT KIT"
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 46, weight: .semibold)
         return label
@@ -26,14 +26,14 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     let bottomView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 53/255, green: 74/255, blue: 159/255, alpha: 1.0)
+        view.backgroundColor = UIColor.green
         return view
     }()
 
     let topView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor(red: 53/255, green: 74/255, blue: 159/255, alpha: 1.0)
+        view.backgroundColor = UIColor.green
         return view
     }()
 
