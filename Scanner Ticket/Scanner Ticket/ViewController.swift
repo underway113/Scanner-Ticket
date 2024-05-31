@@ -31,6 +31,24 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return label
     }()
 
+    let lastScanTitleLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.text = "Last Scanned QR:"
+        label.font = UIFont.systemFont(ofSize: 10)
+        label.textAlignment = .center
+        return label
+    }()
+    let lastScanLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textAlignment = .center
+        return label
+    }()
+
     let bgView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +64,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupPreviewLayer()
         setupScanTypeLabel()
         setupTopLabel()
+        setupLastScanLabel()
         updateView()
     }
 
@@ -142,6 +161,17 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
+    private func setupLastScanLabel() {
+        bgView.addSubview(lastScanTitleLabel)
+        bgView.addSubview(lastScanLabel)
+        NSLayoutConstraint.activate([
+            lastScanLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
+            lastScanLabel.topAnchor.constraint(equalTo: scanTypeLabel.bottomAnchor, constant: 50),
+            lastScanTitleLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
+            lastScanTitleLabel.bottomAnchor.constraint(equalTo: lastScanLabel.topAnchor, constant: 5)
+        ])
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer.position = CGPoint(x: bgView.frame.midX, y: bgView.frame.midY)
@@ -220,8 +250,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
+
     private func found(code: String) {
         let extractedString = extractString(from: code)
+        lastScanLabel.text = extractedString // Update last scan label with the extracted string
 
         let urlString = URLs.redirect[currentURLIndex] + extractedString
 
