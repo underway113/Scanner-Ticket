@@ -194,7 +194,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let extractedString = extractString(from: code)
 
         let urlString = URLs.redirect[currentURLIndex] + extractedString
-        print("xoxo \(urlString)")
 
         if let url = URL(string: urlString) {
             UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
@@ -219,7 +218,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func extractString(from urlString: String) -> String {
         let components = urlString.components(separatedBy: "_")
         if components.count >= 2 {
-            return components[0]
+            return urlString
         } else {
             return "\(urlString)\nInvalid QR Code!"
         }
