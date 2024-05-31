@@ -60,7 +60,8 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
-URLs.swift
 
+URLs.swift
+GoogleService-Info.plist
 
 .xcuserstate
