@@ -7,12 +7,15 @@
 
 import UIKit
 import AVFoundation
+import FirebaseFirestore
 
 class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var currentURLIndex = 0
 
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
+
+    let db = Firestore.firestore()
 
     let scanTypeLabel: UILabel = {
         let label = UILabel()
@@ -57,7 +60,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        createDocument()
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
@@ -302,5 +305,21 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
+    }
+}
+
+extension ViewController {
+    func createDocument() {
+        let data: [String: Any] = [
+            "name": "Tokyo2",
+            "country": "Japan"
+        ]
+        db.collection("cities").document("Tokyo").setData(data) { error in
+            if let error = error {
+                print("Error writing document: \(error)")
+            } else {
+                print("Document successfully written!")
+            }
+        }
     }
 }
