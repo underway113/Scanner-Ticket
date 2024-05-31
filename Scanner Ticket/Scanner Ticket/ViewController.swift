@@ -238,6 +238,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         present(alertController, animated: true, completion: nil)
     }
 
+    
     override var prefersStatusBarHidden: Bool {
         return false
     }
