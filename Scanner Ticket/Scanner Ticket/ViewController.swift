@@ -112,6 +112,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
+        AudioServicesPlaySystemSound(1520)
         if gesture.direction == .left {
             // Swipe left
             currentURLIndex = (currentURLIndex + 1) % URLs.redirect.count
@@ -185,7 +186,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if let metadataObject = metadataObjects.first {
             guard let readableObject = metadataObject as? AVMetadataMachineReadableCodeObject else { return }
             guard let stringValue = readableObject.stringValue else { return }
-            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
             found(code: stringValue)
         }
     }
@@ -198,17 +198,19 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
         if let url = URL(string: urlString) {
             UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
+                guard let self = self else { return }
                 if success {
+                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     DispatchQueue.global(qos: .userInitiated).async {
                         // Perform AVCaptureSession operations on a background thread
-                        self?.captureSession.startRunning()
+                        self.captureSession.startRunning()
                     }
 
                 }
             })
         }
         else {
-            showAlert(with: extractedString, completion: {
+            showErrorAlert(with: extractedString, completion: {
                 self.viewWillAppear(true)
             })
         }
@@ -223,11 +225,12 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    func showAlert(with message: String, completion: @escaping () -> Void) {
+    func showErrorAlert(with message: String, completion: @escaping () -> Void) {
         let alertController = UIAlertController(title: "Extracted QR Code", message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             completion()
         })
+        AudioServicesPlaySystemSound(1521)
         present(alertController, animated: true, completion: nil)
     }
 
