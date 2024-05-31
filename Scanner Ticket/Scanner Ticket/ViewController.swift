@@ -127,15 +127,15 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private func updateView() {
         switch currentURLIndex {
         case 0:
-            scanEntryLabel.text = "ENTRY"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.blue
-            topView.backgroundColor = UIColor.blue
-        case 1:
             scanEntryLabel.text = "PARTICIPANT KIT"
             scanEntryLabel.textColor = UIColor.white
             bottomView.backgroundColor = UIColor.green
             topView.backgroundColor = UIColor.green
+        case 1:
+            scanEntryLabel.text = "ENTRY"
+            scanEntryLabel.textColor = UIColor.white
+            bottomView.backgroundColor = UIColor.blue
+            topView.backgroundColor = UIColor.blue
         case 2:
             scanEntryLabel.text = "MAIN FOOD"
             scanEntryLabel.textColor = UIColor.white
