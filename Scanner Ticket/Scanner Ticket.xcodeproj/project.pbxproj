@@ -17,6 +17,7 @@
 		CBCA837D2C097DC4006F178E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBCA837B2C097DC4006F178E /* Main.storyboard */; };
 		CBCA837F2C097DC6006F178E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBCA837E2C097DC6006F178E /* Assets.xcassets */; };
 		CBCA83822C097DC6006F178E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */; };
+		CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067C2C0A16A20093F4CB /* ListViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		CBCA837E2C097DC6006F178E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBCA83812C097DC6006F178E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBCA83832C097DC6006F178E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +56,6 @@
 				772E244E3AD1A653393886BA /* Pods-Scanner Ticket.debug.xcconfig */,
 				9C4C30C18D7ABF83CBF650B9 /* Pods-Scanner Ticket.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -91,6 +92,7 @@
 				CBCA83752C097DC4006F178E /* AppDelegate.swift */,
 				CBCA83772C097DC4006F178E /* SceneDelegate.swift */,
 				CBCA83792C097DC4006F178E /* ViewController.swift */,
+				CBF2067C2C0A16A20093F4CB /* ListViewController.swift */,
 				CBCA837B2C097DC4006F178E /* Main.storyboard */,
 				CBCA837E2C097DC6006F178E /* Assets.xcassets */,
 				CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */,
@@ -221,6 +223,7 @@
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
+				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
 				CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

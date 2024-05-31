@@ -43,6 +43,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         label.textAlignment = .center
         return label
     }()
+
     let lastScanLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -58,9 +59,20 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return view
     }()
 
+    let listButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("List", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        createDocument()
+        //        createDocument()
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
@@ -68,6 +80,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupScanTypeLabel()
         setupTopLabel()
         setupLastScanLabel()
+        setuplistButton()
         updateView()
     }
 
@@ -128,17 +141,16 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
         previewLayer.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
-        previewLayer.cornerRadius = 20 // Adjust the corner radius value as needed
+        previewLayer.cornerRadius = 20
         previewLayer.masksToBounds = true
         previewLayer.position = bgView.center
         bgView.layer.addSublayer(previewLayer)
 
-        // Add border to the previewLayer
         let borderLayer = CALayer()
         borderLayer.frame = previewLayer.bounds
-        borderLayer.cornerRadius = 20 // Same as the corner radius of previewLayer
-        borderLayer.borderWidth = 2.0 // Adjust border width as needed
-        borderLayer.borderColor = UIColor.white.cgColor // Set border color
+        borderLayer.cornerRadius = 20
+        borderLayer.borderWidth = 2.0
+        borderLayer.borderColor = UIColor.white.cgColor
         borderLayer.masksToBounds = true
         previewLayer.addSublayer(borderLayer)
 
@@ -146,7 +158,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             self.captureSession.startRunning()
         }
     }
-
 
     private func setupScanTypeLabel() {
         bgView.addSubview(scanTypeLabel)
@@ -175,6 +186,17 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
+    private func setuplistButton() {
+        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
+        view.addSubview(listButton)
+        NSLayoutConstraint.activate([
+            listButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            listButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            listButton.widthAnchor.constraint(equalToConstant: 200),
+            listButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer.position = CGPoint(x: bgView.frame.midX, y: bgView.frame.midY)
@@ -183,10 +205,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
         AudioServicesPlaySystemSound(1520)
         if gesture.direction == .left {
-            // Swipe left
             currentURLIndex = (currentURLIndex + 1) % URLs.redirect.count
         } else if gesture.direction == .right {
-            // Swipe right
             currentURLIndex = (currentURLIndex - 1 + URLs.redirect.count) % URLs.redirect.count
         }
 
@@ -253,10 +273,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-
     private func found(code: String) {
         let extractedString = extractString(from: code)
-        lastScanLabel.text = extractedString // Update last scan label with the extracted string
+        lastScanLabel.text = extractedString
 
         let urlString = URLs.redirect[currentURLIndex] + extractedString
 
@@ -266,7 +285,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 if success {
                     AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
                     DispatchQueue.global(qos: .userInitiated).async {
-                        // Perform AVCaptureSession operations on a background thread
                         self.captureSession.startRunning()
                     }
 
@@ -298,6 +316,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         present(alertController, animated: true, completion: nil)
     }
 
+    @objc func listButtonTapped() {
+        guard let navigationController = navigationController else {
+            print("Navigation controller is nil.")
+            return
+        }
+
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning()
+        }
+        let listVC = ListViewController()
+        navigationController.pushViewController(listVC, animated: true)
+    }
 
     override var prefersStatusBarHidden: Bool {
         return false
@@ -308,18 +338,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
 }
 
-extension ViewController {
-    func createDocument() {
-        let data: [String: Any] = [
-            "name": "Tokyo2",
-            "country": "Japan"
-        ]
-        db.collection("cities").document("Tokyo").setData(data) { error in
-            if let error = error {
-                print("Error writing document: \(error)")
-            } else {
-                print("Document successfully written!")
-            }
-        }
-    }
-}
+//extension ViewController {
+//    func createDocument() {
+//        let data: [String: Any] = [
+//            "name": "Tokyo2",
+//            "country": "Japan"
+//        ]
+//        db.collection("cities").document("Tokyo").setData(data) { error in
+//            if let error = error {
+//                print("Error writing document: \(error)")
+//            } else {
+//                print("Document successfully written!")
+//            }
+//        }
+//    }
+//}
