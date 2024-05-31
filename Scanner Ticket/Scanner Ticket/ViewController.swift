@@ -14,33 +14,42 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
 
-    let scanEntryLabel: UILabel = {
+    let scanTypeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "PARTICIPANT KIT"
         label.textColor = .white
-        label.font = UIFont.systemFont(ofSize: 46, weight: .semibold)
+        label.font = UIFont.systemFont(ofSize: 45, weight: .semibold)
         return label
     }()
 
-    let bottomView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.green
-        return view
+    let topLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "MODA FamDay 2024"
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 35, weight: .semibold)
+        return label
     }()
 
-    let topView: UIView = {
+    let bgView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = UIColor.green
         return view
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Add swipe gesture recognizers
+        setupGestureRecognizers()
+        setupCaptureSession()
+        setupBackgroundView()
+        setupPreviewLayer()
+        setupScanTypeLabel()
+        setupTopLabel()
+        updateView()
+    }
+
+    private func setupGestureRecognizers() {
         let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeLeftGesture.direction = .left
         view.addGestureRecognizer(swipeLeftGesture)
@@ -48,8 +57,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe))
         swipeRightGesture.direction = .right
         view.addGestureRecognizer(swipeRightGesture)
+    }
 
-
+    private func setupCaptureSession() {
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
 
@@ -80,35 +90,61 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             failed()
             return
         }
+    }
 
+    private func setupBackgroundView() {
+        view.addSubview(bgView)
+        NSLayoutConstraint.activate([
+            bgView.topAnchor.constraint(equalTo: view.topAnchor),
+            bgView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bgView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bgView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    private func setupPreviewLayer() {
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
-        previewLayer.frame = view.layer.bounds
         previewLayer.videoGravity = .resizeAspectFill
-        view.layer.addSublayer(previewLayer)
+        previewLayer.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
+        previewLayer.cornerRadius = 20 // Adjust the corner radius value as needed
+        previewLayer.masksToBounds = true
+        previewLayer.position = bgView.center
+        bgView.layer.addSublayer(previewLayer)
 
-        // Add bottomView to the view
-        view.addSubview(bottomView)
-        NSLayoutConstraint.activate([
-            bottomView.heightAnchor.constraint(equalToConstant: 120),
-            bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        // Add border to the previewLayer
+        let borderLayer = CALayer()
+        borderLayer.frame = previewLayer.bounds
+        borderLayer.cornerRadius = 20 // Same as the corner radius of previewLayer
+        borderLayer.borderWidth = 2.0 // Adjust border width as needed
+        borderLayer.borderColor = UIColor.white.cgColor // Set border color
+        borderLayer.masksToBounds = true
+        previewLayer.addSublayer(borderLayer)
 
-        view.addSubview(topView)
-        NSLayoutConstraint.activate([
-            topView.heightAnchor.constraint(equalToConstant: 120),
-            topView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            topView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            topView.topAnchor.constraint(equalTo: view.topAnchor)
-        ])
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+        }
+    }
 
-        // Add scanEntryLabel to the bottomView
-        bottomView.addSubview(scanEntryLabel)
+
+    private func setupScanTypeLabel() {
+        bgView.addSubview(scanTypeLabel)
         NSLayoutConstraint.activate([
-            scanEntryLabel.centerXAnchor.constraint(equalTo: bottomView.centerXAnchor),
-            scanEntryLabel.topAnchor.constraint(equalTo: bottomView.topAnchor, constant: 20)
+            scanTypeLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
+            scanTypeLabel.bottomAnchor.constraint(equalTo: bgView.bottomAnchor, constant: -200)
         ])
+    }
+
+    private func setupTopLabel() {
+        bgView.addSubview(topLabel)
+        NSLayoutConstraint.activate([
+            topLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
+            topLabel.topAnchor.constraint(equalTo: bgView.topAnchor, constant: 220)
+        ])
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        previewLayer.position = CGPoint(x: bgView.frame.midX, y: bgView.frame.midY)
     }
 
     @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
@@ -127,35 +163,29 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private func updateView() {
         switch currentURLIndex {
         case 0:
-            scanEntryLabel.text = "PARTICIPANT KIT"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.green
-            topView.backgroundColor = UIColor.green
+            scanTypeLabel.text = "PARTICIPANT KIT"
+            scanTypeLabel.textColor = UIColor.white
+            bgView.backgroundColor = UIColor(red: 0.11, green: 0.72, blue: 0.53, alpha: 1.0) // Green
         case 1:
-            scanEntryLabel.text = "ENTRY"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.blue
-            topView.backgroundColor = UIColor.blue
+            scanTypeLabel.text = "ENTRY"
+            scanTypeLabel.textColor = UIColor.white
+            bgView.backgroundColor = UIColor(red: 0.19, green: 0.56, blue: 0.96, alpha: 1.0) // Blue
         case 2:
-            scanEntryLabel.text = "MAIN FOOD"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.red
-            topView.backgroundColor = UIColor.red
+            scanTypeLabel.text = "MAIN FOOD"
+            scanTypeLabel.textColor = UIColor.white
+            bgView.backgroundColor = UIColor(red: 0.90, green: 0.30, blue: 0.26, alpha: 1.0) // Red
         case 3:
-            scanEntryLabel.text = "SNACK"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.purple
-            topView.backgroundColor = UIColor.purple
+            scanTypeLabel.text = "SNACK"
+            scanTypeLabel.textColor = UIColor.white
+            bgView.backgroundColor = UIColor(red: 0.61, green: 0.35, blue: 0.71, alpha: 1.0) // Purple
         default:
-            scanEntryLabel.text = "ERROR"
-            scanEntryLabel.textColor = UIColor.white
-            bottomView.backgroundColor = UIColor.black
-            topView.backgroundColor = UIColor.black
-
+            scanTypeLabel.text = "ERROR"
+            scanTypeLabel.textColor = UIColor.white
+            bgView.backgroundColor = UIColor.black
         }
     }
 
-    func failed() {
+    private func failed() {
         let alertController = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
         present(alertController, animated: true)
@@ -190,7 +220,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    func found(code: String) {
+    private func found(code: String) {
         let extractedString = extractString(from: code)
 
         let urlString = URLs.redirect[currentURLIndex] + extractedString
@@ -215,7 +245,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    func extractString(from urlString: String) -> String {
+    private func extractString(from urlString: String) -> String {
         let components = urlString.components(separatedBy: "_")
         if components.count >= 2 {
             return urlString
@@ -224,7 +254,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    func showErrorAlert(with message: String, completion: @escaping () -> Void) {
+    private func showErrorAlert(with message: String, completion: @escaping () -> Void) {
         let alertController = UIAlertController(title: "Extracted QR Code", message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             completion()
