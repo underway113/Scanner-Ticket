@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
+		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
 		CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83752C097DC4006F178E /* AppDelegate.swift */; };
 		CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83772C097DC4006F178E /* SceneDelegate.swift */; };
 		CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83792C097DC4006F178E /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
 		CBCA83722C097DC4006F178E /* Scanner Ticket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scanner Ticket.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBCA83752C097DC4006F178E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBCA83772C097DC4006F178E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				CBCA837E2C097DC6006F178E /* Assets.xcassets */,
 				CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */,
 				CBCA83832C097DC6006F178E /* Info.plist */,
+				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
 			);
 			path = "Scanner Ticket";
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
+				CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

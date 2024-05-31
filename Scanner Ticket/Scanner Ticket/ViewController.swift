@@ -10,12 +10,6 @@ import AVFoundation
 
 class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var currentURLIndex = 0
-    var urlsRedirect = [
-        "https://docs.google.com/forms/d/e/1FAIpQLSfPjJ0pRhjU3Ic06quhlYuwPVZcHre4yXH_A6mjBBEK4OPQ6w/formResponse?entry.2008314890=",
-        "https://example.com/url1",
-        "https://example.com/url2",
-        "https://example.com/url3"
-    ]
 
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
@@ -120,10 +114,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     @objc func handleSwipe(gesture: UISwipeGestureRecognizer) {
         if gesture.direction == .left {
             // Swipe left
-            currentURLIndex = (currentURLIndex + 1) % urlsRedirect.count
+            currentURLIndex = (currentURLIndex + 1) % URLs.redirect.count
         } else if gesture.direction == .right {
             // Swipe right
-            currentURLIndex = (currentURLIndex - 1 + urlsRedirect.count) % urlsRedirect.count
+            currentURLIndex = (currentURLIndex - 1 + URLs.redirect.count) % URLs.redirect.count
         }
 
         self.updateView()
@@ -199,10 +193,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     func found(code: String) {
         let extractedString = extractString(from: code)
 
-        let urlString = urlsRedirect[currentURLIndex] + extractedString
+        let urlString = URLs.redirect[currentURLIndex] + extractedString
         print("xoxo \(urlString)")
 
-        //        let urlString = "https://docs.google.com/forms/d/e/1FAIpQLSfPjJ0pRhjU3Ic06quhlYuwPVZcHre4yXH_A6mjBBEK4OPQ6w/formResponse?entry.2008314890=\(extractedString)"
         if let url = URL(string: urlString) {
             UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
                 if success {
@@ -238,7 +231,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         present(alertController, animated: true, completion: nil)
     }
 
-    
+
     override var prefersStatusBarHidden: Bool {
         return false
     }
