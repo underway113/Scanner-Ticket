@@ -7,11 +7,11 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var participants: [String: Participant] = [:]
     var filteredParticipants: [String: Participant] = [:]
     var tableView = UITableView()
+    var searchBar = UISearchBar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        setupBackgroundColorView()
         setupSearchBar()
         setupTableView()
         fetchParticipants()
@@ -27,30 +27,13 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         navigationController?.navigationBar.tintColor = .white
     }
 
-    private func setupBackgroundColorView() {
-        guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else { return }
-
-        let colorView = UIView()
-        colorView.backgroundColor = ticketType.backgroundColor
-        colorView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(colorView)
-
-        NSLayoutConstraint.activate([
-            colorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            colorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            colorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            colorView.heightAnchor.constraint(equalToConstant: 50)
-        ])
-    }
-
     private func setupSearchBar() {
-        let searchBar = UISearchBar()
         searchBar.delegate = self
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(searchBar)
 
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
@@ -64,7 +47,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         tableView.delegate = self
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -98,7 +81,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
     }
 
-
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -122,7 +104,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case .snack:
             displayValue = participant.snack
         case .none:
-            displayValue = false // Default case
+            displayValue = false
         }
         let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
         let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)

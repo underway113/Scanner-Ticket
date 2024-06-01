@@ -138,7 +138,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private func setupPreviewLayer() {
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
+        previewLayer.frame = CGRect(x: 0, y: 0, width: 280, height: 280)
         previewLayer.cornerRadius = 20
         previewLayer.masksToBounds = true
         previewLayer.position = bgView.center
@@ -312,29 +312,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 print("Error: \(error)")
             }
         }
-
-        //        let extractedString = extractString(from: code)
-        //        lastScanLabel.text = extractedString
-        //
-        //        let urlString = URLs.redirect[currentURLIndex] + extractedString
-        //
-        //        if let url = URL(string: urlString) {
-        //            UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
-        //                guard let self = self else { return }
-        //                if success {
-        //                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-        //                    DispatchQueue.global(qos: .userInitiated).async {
-        //                        self.captureSession.startRunning()
-        //                    }
-        //
-        //                }
-        //            })
-        //        }
-        //        else {
-        //            showAlert(with: extractedString, completion: {
-        //                self.viewWillAppear(true)
-        //            })
-        //        }
     }
 
     private func entryFieldName(for index: Int) -> String {
@@ -353,8 +330,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    // Function to play sound
-    func playSound() {
+    func playSuccessSound() {
         // Set the audio session category to allow playback even when silent
         do {
             try AVAudioSession.sharedInstance().setCategory(.playback)
@@ -363,11 +339,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             print("Error setting audio session category: \(error.localizedDescription)")
         }
 
-        // Play the sound
         Sound.play(file: "scanner_sound.mp3")
     }
-
-
 
     private func showSuccessAlert(with message: String, completion: @escaping () -> Void) {
         let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
@@ -375,7 +348,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             completion()
         })
         
-        playSound()
+        playSuccessSound()
         AudioServicesPlaySystemSound(1520)
         present(alertController, animated: true, completion: nil)
     }
@@ -403,12 +376,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         listVC.currentURLIndex = self.currentURLIndex
         navigationController.pushViewController(listVC, animated: true)
     }
-
-    override var prefersStatusBarHidden: Bool {
-        return false
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
+//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+//        return .portrait
+//    }
 }
