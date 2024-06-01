@@ -106,7 +106,6 @@
 				CBCA83772C097DC4006F178E /* SceneDelegate.swift */,
 				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
 				CBCA837B2C097DC4006F178E /* Main.storyboard */,
-				CBCA837E2C097DC6006F178E /* Assets.xcassets */,
 				CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */,
 				CBCA83832C097DC6006F178E /* Info.plist */,
 				CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */,
@@ -142,6 +141,7 @@
 		CBE392BD2C0B2251003669C4 /* Asset */ = {
 			isa = PBXGroup;
 			children = (
+				CBCA837E2C097DC6006F178E /* Assets.xcassets */,
 				CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */,
 			);
 			path = Asset;
