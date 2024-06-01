@@ -18,6 +18,7 @@
 		CBCA837F2C097DC6006F178E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBCA837E2C097DC6006F178E /* Assets.xcassets */; };
 		CBCA83822C097DC6006F178E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */; };
 		CBE392C02C0B2313003669C4 /* scanner_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */; };
+		CBE392C32C0B30C4003669C4 /* ParticipantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */; };
 		CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067C2C0A16A20093F4CB /* ListViewController.swift */; };
 		CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */; };
 		CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */; };
@@ -38,6 +39,7 @@
 		CBCA83812C097DC6006F178E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBCA83832C097DC6006F178E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = scanner_sound.mp3; sourceTree = "<group>"; };
+		CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantTableViewCell.swift; sourceTree = "<group>"; };
 		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketTypeEnum.swift; sourceTree = "<group>"; };
 		CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 		CBCA83742C097DC4006F178E /* Scanner Ticket */ = {
 			isa = PBXGroup;
 			children = (
+				CBE392C12C0B30B3003669C4 /* ViewCell */,
 				CBE392BD2C0B2251003669C4 /* Asset */,
 				CBE392BC2C0B224D003669C4 /* Model */,
 				CBE392BB2C0B223B003669C4 /* Enum */,
@@ -142,6 +145,14 @@
 				CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */,
 			);
 			path = Asset;
+			sourceTree = "<group>";
+		};
+		CBE392C12C0B30B3003669C4 /* ViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */,
+			);
+			path = ViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -265,6 +276,7 @@
 				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
+				CBE392C32C0B30C4003669C4 /* ParticipantTableViewCell.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
 				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
 				CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */,

@@ -1,3 +1,10 @@
+//
+//  ListViewController.swift
+//  Scanner Ticket
+//
+//  Created by Jeremy Adam on 31/05/24.
+//
+
 import FirebaseFirestore
 import UIKit
 
@@ -6,6 +13,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     let db = Firestore.firestore()
     var participants: [String: Participant] = [:]
     var filteredParticipants: [String: Participant] = [:]
+
     var tableView = UITableView()
     var searchBar = UISearchBar()
 
@@ -52,13 +60,13 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        
+        tableView.register(ParticipantTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     private func fetchParticipants() {
         db.collection("Participants")
-            .order(by: "name") // Order by name
+            .order(by: "name")
             .getDocuments { (querySnapshot, error) in
                 guard let documents = querySnapshot?.documents else {
                     print("Error fetching documents: \(error!)")
@@ -76,7 +84,9 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
                         dict[document.documentID] = participant
                     }
                 }
-                self.filteredParticipants = self.participants
+                let sortedParticipants = self.participants.sorted(by: { $0.value.name < $1.value.name })
+                self.filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipants)
+
                 self.tableView.reloadData()
             }
     }
@@ -88,12 +98,14 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? ParticipantTableViewCell else {
+            return UITableViewCell()
+        }
 
         let documentID = Array(filteredParticipants.keys)[indexPath.row]
         let participant = filteredParticipants[documentID]!
-
         let displayValue: Bool
+
         switch TicketTypeEnum(rawValue: currentURLIndex) {
         case .participantKit:
             displayValue = participant.participantKit
@@ -106,10 +118,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case .none:
             displayValue = false
         }
+
+        cell.configure(id: documentID, name: participant.name, value: displayValue)
+
         let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
         let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
 
-        cell.textLabel?.text = "\(documentID) \(participant.name) \(displayValue)"
         cell.backgroundColor = displayValue ? darkerGreen : darkerRed
 
         return cell
@@ -122,31 +136,37 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
 
     // MARK: - UISearchBarDelegate
+    //    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    //        if searchText.isEmpty {
+    //            // If search text is empty, show all participants in sorted order by name
+    //            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
+    //            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipantsArray)
+    //        } else {
+    //            // If search text is not empty, filter participants based on search text and maintain sorted order by name
+    //            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
+    //            let filteredParticipantsArray = sortedParticipantsArray.filter { _, participant in
+    //                let displayValue: String
+    //                switch TicketTypeEnum(rawValue: currentURLIndex) {
+    //                case .participantKit:
+    //                    displayValue = "\(participant.participantKit)"
+    //                case .entry:
+    //                    displayValue = "\(participant.entry)"
+    //                case .mainFood:
+    //                    displayValue = "\(participant.mainFood)"
+    //                case .snack:
+    //                    displayValue = "\(participant.snack)"
+    //                case .none:
+    //                    displayValue = "ERROR"
+    //                }
+    //
+    //                let cellText = "\(participant.name) \(displayValue)"
+    //                return cellText.lowercased().contains(searchText.lowercased())
+    //            }
+    //            // Convert the filtered array of tuples into a dictionary for display
+    //            filteredParticipants = Dictionary(uniqueKeysWithValues: filteredParticipantsArray)
+    //        }
+    //
+    //        tableView.reloadData()
+    //    }
 
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredParticipants = participants
-        } else {
-            filteredParticipants = participants.filter { key, participant in
-                let documentID = key
-                let displayValue: String
-                switch TicketTypeEnum(rawValue: currentURLIndex) {
-                case .participantKit:
-                    displayValue = "\(participant.participantKit)"
-                case .entry:
-                    displayValue = "\(participant.entry)"
-                case .mainFood:
-                    displayValue = "\(participant.mainFood)"
-                case .snack:
-                    displayValue = "\(participant.snack)"
-                case .none:
-                    displayValue = "ERROR"
-                }
-
-                let cellText = "\(documentID) \(participant.name) \(displayValue)"
-                return cellText.lowercased().contains(searchText.lowercased())
-            }
-        }
-        tableView.reloadData()
-    }
 }
