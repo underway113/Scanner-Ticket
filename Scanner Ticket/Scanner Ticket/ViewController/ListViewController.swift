@@ -71,7 +71,7 @@ class ListViewController: UIViewController {
             .order(by: "name")
             .getDocuments { [weak self] (querySnapshot, error) in
                 guard let self = self else { return }
-                activityIndicator.stopAnimating()
+                self.activityIndicator.stopAnimating()
                 if let error = error {
                     self.showAlert(message: "Error fetching participants: \(error.localizedDescription)")
                     return
@@ -89,7 +89,7 @@ class ListViewController: UIViewController {
                        let entry = data["entry"] as? Bool,
                        let mainFood = data["mainFood"] as? Bool,
                        let snack = data["snack"] as? Bool {
-                        let participant = Participant(name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
+                        let participant = Participant(documentID: document.documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
                         dict[document.documentID] = participant
                     }
                 }
@@ -99,6 +99,7 @@ class ListViewController: UIViewController {
                 self.tableView.reloadData()
             }
     }
+
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
@@ -155,9 +156,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
             filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipantsArray)
         } else {
             // If search text is not empty, filter participants based on search text and maintain sorted order by name
-            let filteredParticipantsArray = participants.filter { (documentID, participant) in
+            let filteredParticipantsArray = participants.filter { (_, participant) in
                 let matchesName = participant.name.lowercased().contains(searchText.lowercased())
-                let matchesDocumentID = documentID.lowercased().contains(searchText.lowercased())
+                let matchesDocumentID = participant.documentID?.lowercased().contains(searchText.lowercased()) ?? false
                 return matchesName || matchesDocumentID
             }
             let sortedFilteredParticipantsArray = filteredParticipantsArray.sorted(by: { $0.value.name < $1.value.name })
@@ -167,5 +168,5 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
 
         tableView.reloadData()
     }
-
 }
+
