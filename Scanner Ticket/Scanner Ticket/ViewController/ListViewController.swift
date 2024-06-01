@@ -8,7 +8,7 @@
 import FirebaseFirestore
 import UIKit
 
-class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class ListViewController: UIViewController {
     public var currentURLIndex: Int = 0
     let db = Firestore.firestore()
     var participants: [String: Participant] = [:]
@@ -16,6 +16,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
 
     var tableView = UITableView()
     var searchBar = UISearchBar()
+    var activityIndicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,16 +61,24 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        
+
         tableView.register(ParticipantTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     private func fetchParticipants() {
+        activityIndicator.startAnimating()
         db.collection("Participants")
             .order(by: "name")
-            .getDocuments { (querySnapshot, error) in
+            .getDocuments { [weak self] (querySnapshot, error) in
+                guard let self = self else { return }
+                activityIndicator.stopAnimating()
+                if let error = error {
+                    self.showAlert(message: "Error fetching participants: \(error.localizedDescription)")
+                    return
+                }
+
                 guard let documents = querySnapshot?.documents else {
-                    print("Error fetching documents: \(error!)")
+                    print("Error fetching documents")
                     return
                 }
 
@@ -91,8 +100,14 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             }
     }
 
-    // MARK: - UITableViewDataSource
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
+    }
+}
 
+extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredParticipants.count
     }
@@ -129,44 +144,28 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         return cell
     }
 
-    // MARK: - UITableViewDelegate
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    // MARK: - UISearchBarDelegate
-    //    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    //        if searchText.isEmpty {
-    //            // If search text is empty, show all participants in sorted order by name
-    //            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
-    //            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipantsArray)
-    //        } else {
-    //            // If search text is not empty, filter participants based on search text and maintain sorted order by name
-    //            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
-    //            let filteredParticipantsArray = sortedParticipantsArray.filter { _, participant in
-    //                let displayValue: String
-    //                switch TicketTypeEnum(rawValue: currentURLIndex) {
-    //                case .participantKit:
-    //                    displayValue = "\(participant.participantKit)"
-    //                case .entry:
-    //                    displayValue = "\(participant.entry)"
-    //                case .mainFood:
-    //                    displayValue = "\(participant.mainFood)"
-    //                case .snack:
-    //                    displayValue = "\(participant.snack)"
-    //                case .none:
-    //                    displayValue = "ERROR"
-    //                }
-    //
-    //                let cellText = "\(participant.name) \(displayValue)"
-    //                return cellText.lowercased().contains(searchText.lowercased())
-    //            }
-    //            // Convert the filtered array of tuples into a dictionary for display
-    //            filteredParticipants = Dictionary(uniqueKeysWithValues: filteredParticipantsArray)
-    //        }
-    //
-    //        tableView.reloadData()
-    //    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            // If search text is empty, show all participants in sorted order by name
+            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
+            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipantsArray)
+        } else {
+            // If search text is not empty, filter participants based on search text and maintain sorted order by name
+            let filteredParticipantsArray = participants.filter { (documentID, participant) in
+                let matchesName = participant.name.lowercased().contains(searchText.lowercased())
+                let matchesDocumentID = documentID.lowercased().contains(searchText.lowercased())
+                return matchesName || matchesDocumentID
+            }
+            let sortedFilteredParticipantsArray = filteredParticipantsArray.sorted(by: { $0.value.name < $1.value.name })
+            // Convert the filtered array of tuples into a dictionary for display
+            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedFilteredParticipantsArray)
+        }
+
+        tableView.reloadData()
+    }
 
 }
