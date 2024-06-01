@@ -14,7 +14,7 @@ enum TicketTypeEnum: Int {
     case mainFood = 2
     case snack = 3
 
-    var description: String {
+    var title: String {
         switch self {
         case .participantKit:
             return "PARTICIPANT KIT"
@@ -24,6 +24,19 @@ enum TicketTypeEnum: Int {
             return "MAIN FOOD"
         case .snack:
             return "SNACK"
+        }
+    }
+
+    var description: String {
+        switch self {
+        case .participantKit:
+            return "participantKit"
+        case .entry:
+            return "entry"
+        case .mainFood:
+            return "mainFood"
+        case .snack:
+            return "snack"
         }
     }
 

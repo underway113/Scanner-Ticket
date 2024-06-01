@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		BB5A1FD392AA6DF1927AC135 /* Pods_Scanner_Ticket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77552A68B6850BD69246F584 /* Pods_Scanner_Ticket.framework */; };
+		3B2329C5FA076ED392AA2032 /* Pods_Scanner_Ticket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DCBEEE8E97C4B3FE19F1F32 /* Pods_Scanner_Ticket.framework */; };
 		CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */; };
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
 		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
@@ -20,12 +20,12 @@
 		CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067C2C0A16A20093F4CB /* ListViewController.swift */; };
 		CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */; };
 		CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */; };
+		CBF206832C0B16AF0093F4CB /* scanner_beep.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBF206822C0B16AF0093F4CB /* scanner_beep.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		772E244E3AD1A653393886BA /* Pods-Scanner Ticket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.debug.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.debug.xcconfig"; sourceTree = "<group>"; };
-		77552A68B6850BD69246F584 /* Pods_Scanner_Ticket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scanner_Ticket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		9C4C30C18D7ABF83CBF650B9 /* Pods-Scanner Ticket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.release.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.release.xcconfig"; sourceTree = "<group>"; };
+		41116357153189F79F0D6F97 /* Pods-Scanner Ticket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.debug.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.debug.xcconfig"; sourceTree = "<group>"; };
+		6DCBEEE8E97C4B3FE19F1F32 /* Pods_Scanner_Ticket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scanner_Ticket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
@@ -40,6 +40,8 @@
 		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketTypeEnum.swift; sourceTree = "<group>"; };
 		CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
+		CBF206822C0B16AF0093F4CB /* scanner_beep.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = scanner_beep.mp3; sourceTree = "<group>"; };
+		F0C3858B01E4984DB69E66A3 /* Pods-Scanner Ticket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.release.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,7 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB5A1FD392AA6DF1927AC135 /* Pods_Scanner_Ticket.framework in Frameworks */,
+				3B2329C5FA076ED392AA2032 /* Pods_Scanner_Ticket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,16 +59,16 @@
 		88EF347D6E9790B594859ADE /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				772E244E3AD1A653393886BA /* Pods-Scanner Ticket.debug.xcconfig */,
-				9C4C30C18D7ABF83CBF650B9 /* Pods-Scanner Ticket.release.xcconfig */,
+				41116357153189F79F0D6F97 /* Pods-Scanner Ticket.debug.xcconfig */,
+				F0C3858B01E4984DB69E66A3 /* Pods-Scanner Ticket.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		B6927FB9BA78215D6FB50297 /* Frameworks */ = {
+		C73D5D4850BF5D10124D5787 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				77552A68B6850BD69246F584 /* Pods_Scanner_Ticket.framework */,
+				6DCBEEE8E97C4B3FE19F1F32 /* Pods_Scanner_Ticket.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -78,7 +80,7 @@
 				CBCA83742C097DC4006F178E /* Scanner Ticket */,
 				CBCA83732C097DC4006F178E /* Products */,
 				88EF347D6E9790B594859ADE /* Pods */,
-				B6927FB9BA78215D6FB50297 /* Frameworks */,
+				C73D5D4850BF5D10124D5787 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,6 +104,7 @@
 				CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */,
 				CBCA83832C097DC6006F178E /* Info.plist */,
 				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
+				CBF206822C0B16AF0093F4CB /* scanner_beep.mp3 */,
 				CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */,
 				CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */,
 				CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */,
@@ -116,11 +119,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = CBCA83862C097DC6006F178E /* Build configuration list for PBXNativeTarget "Scanner Ticket" */;
 			buildPhases = (
-				18DEB66B568B72BF2D876011 /* [CP] Check Pods Manifest.lock */,
+				23ED9082DC32F28ECC368A0C /* [CP] Check Pods Manifest.lock */,
 				CBCA836E2C097DC4006F178E /* Sources */,
 				CBCA836F2C097DC4006F178E /* Frameworks */,
 				CBCA83702C097DC4006F178E /* Resources */,
-				09F423A8679A99AF78EA0313 /* [CP] Embed Pods Frameworks */,
+				409C2C0B2B89C07BD7666689 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -170,6 +173,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */,
+				CBF206832C0B16AF0093F4CB /* scanner_beep.mp3 in Resources */,
 				CBCA83822C097DC6006F178E /* LaunchScreen.storyboard in Resources */,
 				CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */,
 				CBCA837F2C097DC6006F178E /* Assets.xcassets in Resources */,
@@ -180,24 +184,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		09F423A8679A99AF78EA0313 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		18DEB66B568B72BF2D876011 /* [CP] Check Pods Manifest.lock */ = {
+		23ED9082DC32F28ECC368A0C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -217,6 +204,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		409C2C0B2B89C07BD7666689 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -374,7 +378,7 @@
 		};
 		CBCA83872C097DC6006F178E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 772E244E3AD1A653393886BA /* Pods-Scanner Ticket.debug.xcconfig */;
+			baseConfigurationReference = 41116357153189F79F0D6F97 /* Pods-Scanner Ticket.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -409,7 +413,7 @@
 		};
 		CBCA83882C097DC6006F178E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9C4C30C18D7ABF83CBF650B9 /* Pods-Scanner Ticket.release.xcconfig */;
+			baseConfigurationReference = F0C3858B01E4984DB69E66A3 /* Pods-Scanner Ticket.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

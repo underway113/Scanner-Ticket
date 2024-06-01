@@ -22,7 +22,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             self.navigationItem.title = "ERROR"
             return
         }
-        title = ticketType.description
+        title = ticketType.title
         view.backgroundColor = ticketType.backgroundColor
         navigationController?.navigationBar.tintColor = .white
     }
@@ -124,9 +124,11 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         case .none:
             displayValue = false // Default case
         }
+        let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
+        let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
 
         cell.textLabel?.text = "\(documentID) \(participant.name) \(displayValue)"
-        cell.backgroundColor = displayValue ? .green : .red
+        cell.backgroundColor = displayValue ? darkerGreen : darkerRed
 
         return cell
     }

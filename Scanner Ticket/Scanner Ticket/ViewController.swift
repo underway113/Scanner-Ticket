@@ -7,15 +7,14 @@
 
 import UIKit
 import AVFoundation
-//import FirebaseFirestore
+import FirebaseFirestore
+import SwiftySound
 
 class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var currentURLIndex = 0
-
+    let db = Firestore.firestore()
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
-
-//    let db = Firestore.firestore()
 
     let scanTypeLabel: UILabel = {
         let label = UILabel()
@@ -72,7 +71,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        createDocument()
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
@@ -221,7 +219,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             return
         }
 
-        scanTypeLabel.text = ticketType.description
+        scanTypeLabel.text = ticketType.title
         scanTypeLabel.textColor = .white
         bgView.backgroundColor = ticketType.backgroundColor
     }
@@ -262,41 +260,112 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     private func found(code: String) {
-        let extractedString = extractString(from: code)
-        lastScanLabel.text = extractedString
+        Task {
+            do {
+                let code = code
+                lastScanLabel.text = code
+                var messagePopup: String = ""
 
-        let urlString = URLs.redirect[currentURLIndex] + extractedString
-
-        if let url = URL(string: urlString) {
-            UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
-                guard let self = self else { return }
-                if success {
-                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-                    DispatchQueue.global(qos: .userInitiated).async {
-                        self.captureSession.startRunning()
-                    }
-
+                let components = code.components(separatedBy: "_")
+                guard components.count == 2 else {
+                    messagePopup = "Invalid QR Code"
+                    showErrorAlert(with: "\(code)\n\(messagePopup)", completion: {
+                        self.viewWillAppear(true)
+                    })
+                    return
                 }
-            })
+
+                let documentID = components[0]
+                let name = components[1]
+
+                // Check if the scanned QR matches any document ID and name combination in the database
+                let docRef = db.collection("Participants").document(documentID)
+
+                let document = try await docRef.getDocument()
+                if document.exists {
+                    let data = document.data()
+                    if let participantName = data?["name"] as? String, participantName == name {
+                        // Match found, update the entry field based on currentURLIndex and TicketTypeEnum
+                        guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
+                            return
+                        }
+                        let fieldName = ticketType.description
+                        try await docRef.updateData([fieldName: true])
+                        messagePopup = "Success Scanned"
+                        print("Document successfully updated")
+                        showSuccessAlert(with: "\(code)\n\(messagePopup)") {
+                            self.viewWillAppear(true)
+                        }
+                    } else {
+                        messagePopup = "Invalid QR Code!!"
+                        print("Invalid QR Code!!")
+                    }
+                } else {
+                    messagePopup = "Participant Not Found"
+                    print("Participant Not Found")
+                }
+
+                showErrorAlert(with: "\(code)\n\(messagePopup)") {
+                    self.viewWillAppear(true)
+                }
+            } catch {
+                print("Error: \(error)")
+            }
         }
-        else {
-            showErrorAlert(with: extractedString, completion: {
-                self.viewWillAppear(true)
-            })
+
+        //        let extractedString = extractString(from: code)
+        //        lastScanLabel.text = extractedString
+        //
+        //        let urlString = URLs.redirect[currentURLIndex] + extractedString
+        //
+        //        if let url = URL(string: urlString) {
+        //            UIApplication.shared.open(url, options: [:], completionHandler: { [weak self] success in
+        //                guard let self = self else { return }
+        //                if success {
+        //                    AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+        //                    DispatchQueue.global(qos: .userInitiated).async {
+        //                        self.captureSession.startRunning()
+        //                    }
+        //
+        //                }
+        //            })
+        //        }
+        //        else {
+        //            showAlert(with: extractedString, completion: {
+        //                self.viewWillAppear(true)
+        //            })
+        //        }
+    }
+
+    private func entryFieldName(for index: Int) -> String {
+        guard let ticketType = TicketTypeEnum(rawValue: index) else {
+            return "entry"
+        }
+        switch ticketType {
+        case .participantKit:
+            return "participantKit"
+        case .entry:
+            return "entry"
+        case .mainFood:
+            return "mainFood"
+        case .snack:
+            return "snack"
         }
     }
 
-    private func extractString(from urlString: String) -> String {
-        let components = urlString.components(separatedBy: "_")
-        if components.count >= 2 {
-            return urlString
-        } else {
-            return "\(urlString)\nInvalid QR Code!"
-        }
+    private func showSuccessAlert(with message: String, completion: @escaping () -> Void) {
+        let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
+            completion()
+        })
+        
+        Sound.play(file: "scanner_beep.mp3")
+        AudioServicesPlaySystemSound(1520)
+        present(alertController, animated: true, completion: nil)
     }
 
     private func showErrorAlert(with message: String, completion: @escaping () -> Void) {
-        let alertController = UIAlertController(title: "Extracted QR Code", message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             completion()
         })
