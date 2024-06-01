@@ -16,12 +16,14 @@ class ListViewController: UIViewController {
 
     var tableView = UITableView()
     var searchBar = UISearchBar()
+    var emptyLabel = UILabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupSearchBar()
         setupTableView()
+        setupEmptyLabel()
         fetchParticipants()
     }
 
@@ -73,6 +75,20 @@ class ListViewController: UIViewController {
         tableView.register(ParticipantTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
+    private func setupEmptyLabel() {
+        emptyLabel.text = "Data Not Found"
+        emptyLabel.textAlignment = .center
+        emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(emptyLabel)
+
+        NSLayoutConstraint.activate([
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+
+        emptyLabel.isHidden = true // Initially hidden
+    }
+
     private func fetchParticipants() {
         db.collection("Participants")
             .order(by: "name")
@@ -90,6 +106,7 @@ class ListViewController: UIViewController {
 
                 self.participants = self.parseParticipants(documents)
                 self.filteredParticipants = self.participants
+                self.updateEmptyLabelVisibility()
                 self.tableView.reloadData()
             }
     }
@@ -116,6 +133,10 @@ class ListViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+
+    private func updateEmptyLabelVisibility() {
+        emptyLabel.isHidden = !filteredParticipants.isEmpty
     }
 }
 
@@ -169,6 +190,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
+        updateEmptyLabelVisibility()
         tableView.reloadData()
     }
 
