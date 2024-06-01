@@ -37,6 +37,7 @@
 		CBCA837E2C097DC6006F178E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		CBCA83812C097DC6006F178E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBCA83832C097DC6006F178E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CBE392BE2C0B226B003669C4 /* scanner_beep_sound.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = scanner_beep_sound.m4a; sourceTree = "<group>"; };
 		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketTypeEnum.swift; sourceTree = "<group>"; };
 		CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
@@ -95,21 +96,54 @@
 		CBCA83742C097DC4006F178E /* Scanner Ticket */ = {
 			isa = PBXGroup;
 			children = (
+				CBE392BD2C0B2251003669C4 /* Asset */,
+				CBE392BC2C0B224D003669C4 /* Model */,
+				CBE392BB2C0B223B003669C4 /* Enum */,
+				CBE392BA2C0B2230003669C4 /* ViewController */,
 				CBCA83752C097DC4006F178E /* AppDelegate.swift */,
 				CBCA83772C097DC4006F178E /* SceneDelegate.swift */,
-				CBCA83792C097DC4006F178E /* ViewController.swift */,
-				CBF2067C2C0A16A20093F4CB /* ListViewController.swift */,
+				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
 				CBCA837B2C097DC4006F178E /* Main.storyboard */,
 				CBCA837E2C097DC6006F178E /* Assets.xcassets */,
 				CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */,
 				CBCA83832C097DC6006F178E /* Info.plist */,
-				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
-				CBF206822C0B16AF0093F4CB /* scanner_beep.mp3 */,
 				CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */,
-				CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */,
-				CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */,
 			);
 			path = "Scanner Ticket";
+			sourceTree = "<group>";
+		};
+		CBE392BA2C0B2230003669C4 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				CBCA83792C097DC4006F178E /* ViewController.swift */,
+				CBF2067C2C0A16A20093F4CB /* ListViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		CBE392BB2C0B223B003669C4 /* Enum */ = {
+			isa = PBXGroup;
+			children = (
+				CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */,
+			);
+			path = Enum;
+			sourceTree = "<group>";
+		};
+		CBE392BC2C0B224D003669C4 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CBE392BD2C0B2251003669C4 /* Asset */ = {
+			isa = PBXGroup;
+			children = (
+				CBF206822C0B16AF0093F4CB /* scanner_beep.mp3 */,
+				CBE392BE2C0B226B003669C4 /* scanner_beep_sound.m4a */,
+			);
+			path = Asset;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
