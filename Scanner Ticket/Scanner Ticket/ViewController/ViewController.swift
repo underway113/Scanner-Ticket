@@ -16,6 +16,14 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
 
+    let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        indicator.color = .black
+        return indicator
+    }()
+
     let scanTypeLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -71,14 +79,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        do {
-            try AVAudioSession.sharedInstance().setCategory(.playback)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print("Error setting audio session category: \(error.localizedDescription)")
-        }
-        
+        playSuccessSound()
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
@@ -269,57 +270,78 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     private func found(code: String) {
         Task {
-            do {
-                let code = code
-                lastScanLabel.text = code
-                var messagePopup: String = ""
+            showActivityIndicator()
+            let components = parseCode(code)
 
-                let components = code.components(separatedBy: "_")
-                guard components.count == 2 else {
-                    messagePopup = "Invalid QR Code"
-                    showErrorAlert(with: "\(code)\n\(messagePopup)", completion: {
+            guard let documentID = components.documentID, let name = components.name else {
+                showErrorAlert(with: "\(code)\nInvalid QR Code") {
+                    self.viewWillAppear(true)
+                }
+                hideActivityIndicator()
+                return
+            }
+
+            do {
+                let participant = try await fetchParticipant(documentID: documentID, name: name)
+                guard let participant = participant else {
+                    showErrorAlert(with: "\(code)\nParticipant Not Found") {
                         self.viewWillAppear(true)
-                    })
+                    }
+                    hideActivityIndicator()
                     return
                 }
 
-                let documentID = components[0]
-                let name = components[1]
-
-                // Check if the scanned QR matches any document ID and name combination in the database
-                let docRef = db.collection("Participants").document(documentID)
-
-                let document = try await docRef.getDocument()
-                if document.exists {
-                    let data = document.data()
-                    if let participantName = data?["name"] as? String, participantName == name {
-                        // Match found, update the entry field based on currentURLIndex and TicketTypeEnum
-                        guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
-                            return
-                        }
-                        let fieldName = ticketType.description
-                        try await docRef.updateData([fieldName: true])
-                        messagePopup = "Success Scanned"
-                        print("Document successfully updated")
-                        showSuccessAlert(with: "\(code)\n\(messagePopup)") {
-                            self.viewWillAppear(true)
-                        }
-                    } else {
-                        messagePopup = "Invalid QR Code!!"
-                        print("Invalid QR Code!!")
+                if let fieldValue = getFieldStatus(participant: participant), fieldValue {
+                    showErrorAlert(with: "\(code)\nQR already Scanned!") {
+                        self.viewWillAppear(true)
                     }
                 } else {
-                    messagePopup = "Participant Not Found"
-                    print("Participant Not Found")
-                }
-
-                showErrorAlert(with: "\(code)\n\(messagePopup)") {
-                    self.viewWillAppear(true)
+                    try await updateField(documentID: documentID)
+                    showSuccessAlert(with: "\(code)\nSuccess Scanned") {
+                        self.viewWillAppear(true)
+                    }
                 }
             } catch {
-                print("Error: \(error)")
+                showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                    self.viewWillAppear(true)
+                }
             }
+            hideActivityIndicator()
         }
+    }
+
+    private func parseCode(_ code: String) -> (documentID: String?, name: String?) {
+        let components = code.components(separatedBy: "_")
+        guard components.count == 2 else {
+            return (nil, nil)
+        }
+        return (components[0], components[1])
+    }
+
+    private func fetchParticipant(documentID: String, name: String) async throws -> [String: Any]? {
+        let docRef = db.collection("Participants").document(documentID)
+        let document = try await docRef.getDocument()
+        guard document.exists, let data = document.data(), let participantName = data["name"] as? String, participantName == name else {
+            return nil
+        }
+        return data
+    }
+
+    private func getFieldStatus(participant: [String: Any]) -> Bool? {
+        guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
+            return nil
+        }
+        let fieldName = ticketType.description
+        return participant[fieldName] as? Bool
+    }
+
+    private func updateField(documentID: String) async throws {
+        guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
+            return
+        }
+        let fieldName = ticketType.description
+        let docRef = db.collection("Participants").document(documentID)
+        try await docRef.updateData([fieldName: true])
     }
 
     private func entryFieldName(for index: Int) -> String {
@@ -384,7 +406,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         listVC.currentURLIndex = self.currentURLIndex
         navigationController.pushViewController(listVC, animated: true)
     }
-//    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-//        return .portrait
-//    }
+
+    private func showActivityIndicator() {
+        view.addSubview(activityIndicator)
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        activityIndicator.startAnimating()
+    }
+
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+        activityIndicator.removeFromSuperview()
+    }
 }

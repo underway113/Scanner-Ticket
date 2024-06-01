@@ -26,13 +26,22 @@ class ListViewController: UIViewController {
     }
 
     private func setupView() {
+        configureNavigationBar()
+        configureViewBackground()
+    }
+
+    private func configureNavigationBar() {
         guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else {
             self.navigationItem.title = "ERROR"
             return
         }
         title = ticketType.title
-        view.backgroundColor = ticketType.backgroundColor
         navigationController?.navigationBar.tintColor = .white
+    }
+
+    private func configureViewBackground() {
+        guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else { return }
+        view.backgroundColor = ticketType.backgroundColor
     }
 
     private func setupSearchBar() {
@@ -79,22 +88,28 @@ class ListViewController: UIViewController {
                     return
                 }
 
-                self.participants = Set(documents.compactMap { document -> Participant? in
-                    let data = document.data()
-                    if let name = data["name"] as? String,
-                       let participantKit = data["participantKit"] as? Bool,
-                       let entry = data["entry"] as? Bool,
-                       let mainFood = data["mainFood"] as? Bool,
-                       let snack = data["snack"] as? Bool {
-                        return Participant(documentID: document.documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
-                    }
-                    return nil
-                })
-
+                self.participants = self.parseParticipants(documents)
                 self.filteredParticipants = self.participants
-
                 self.tableView.reloadData()
             }
+    }
+
+    private func parseParticipants(_ documents: [QueryDocumentSnapshot]) -> Set<Participant> {
+        return Set(documents.compactMap { document in
+            let data = document.data()
+            return createParticipant(from: data, with: document.documentID)
+        })
+    }
+
+    private func createParticipant(from data: [String: Any], with documentID: String) -> Participant? {
+        guard let name = data["name"] as? String,
+              let participantKit = data["participantKit"] as? Bool,
+              let entry = data["entry"] as? Bool,
+              let mainFood = data["mainFood"] as? Bool,
+              let snack = data["snack"] as? Bool else {
+            return nil
+        }
+        return Participant(documentID: documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
     }
 
     private func showAlert(message: String) {
@@ -114,31 +129,38 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
             return UITableViewCell()
         }
 
-        let sortedFilteredParticipants = Array(filteredParticipants).sorted(by: { $0.name < $1.name })
-        let participant = sortedFilteredParticipants[indexPath.row]
-        let displayValue: Bool
-
-        switch TicketTypeEnum(rawValue: currentURLIndex) {
-        case .participantKit:
-            displayValue = participant.participantKit
-        case .entry:
-            displayValue = participant.entry
-        case .mainFood:
-            displayValue = participant.mainFood
-        case .snack:
-            displayValue = participant.snack
-        case .none:
-            displayValue = false
-        }
+        let participant = getSortedFilteredParticipant(at: indexPath.row)
+        let displayValue = getDisplayValue(for: participant)
 
         cell.configure(id: participant.documentID, name: participant.name, value: displayValue)
-
-        let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
-        let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
-
-        cell.backgroundColor = displayValue ? darkerGreen : darkerRed
+        cell.backgroundColor = getBackgroundColor(for: displayValue)
 
         return cell
+    }
+
+    private func getSortedFilteredParticipant(at index: Int) -> Participant {
+        return Array(filteredParticipants).sorted(by: { $0.name < $1.name })[index]
+    }
+
+    private func getDisplayValue(for participant: Participant) -> Bool {
+        switch TicketTypeEnum(rawValue: currentURLIndex) {
+        case .participantKit:
+            return participant.participantKit
+        case .entry:
+            return participant.entry
+        case .mainFood:
+            return participant.mainFood
+        case .snack:
+            return participant.snack
+        case .none:
+            return false
+        }
+    }
+
+    private func getBackgroundColor(for displayValue: Bool) -> UIColor {
+        let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
+        let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
+        return displayValue ? darkerGreen : darkerRed
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -146,16 +168,15 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            filteredParticipants = participants
-        } else {
-            filteredParticipants = participants.filter { participant in
-                let matchesName = participant.name.lowercased().contains(searchText.lowercased())
-                let matchesDocumentID = participant.documentID.lowercased().contains(searchText.lowercased())
-                return matchesName || matchesDocumentID
-            }
-        }
-
+        filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
         tableView.reloadData()
+    }
+
+    private func filterParticipants(by searchText: String) -> Set<Participant> {
+        return participants.filter { participant in
+            let matchesName = participant.name.lowercased().contains(searchText.lowercased())
+            let matchesDocumentID = participant.documentID.lowercased().contains(searchText.lowercased())
+            return matchesName || matchesDocumentID
+        }
     }
 }
