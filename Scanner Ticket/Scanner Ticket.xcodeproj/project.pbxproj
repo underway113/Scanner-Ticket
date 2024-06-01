@@ -18,6 +18,8 @@
 		CBCA837F2C097DC6006F178E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CBCA837E2C097DC6006F178E /* Assets.xcassets */; };
 		CBCA83822C097DC6006F178E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CBCA83802C097DC6006F178E /* LaunchScreen.storyboard */; };
 		CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067C2C0A16A20093F4CB /* ListViewController.swift */; };
+		CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */; };
+		CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		CBCA83812C097DC6006F178E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		CBCA83832C097DC6006F178E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
+		CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketTypeEnum.swift; sourceTree = "<group>"; };
+		CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +103,8 @@
 				CBCA83832C097DC6006F178E /* Info.plist */,
 				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
 				CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */,
+				CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */,
+				CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */,
 			);
 			path = "Scanner Ticket";
 			sourceTree = "<group>";
@@ -220,10 +226,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
 				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
+				CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */,
 				CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

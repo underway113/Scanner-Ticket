@@ -7,7 +7,7 @@
 
 import UIKit
 import AVFoundation
-import FirebaseFirestore
+//import FirebaseFirestore
 
 class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var currentURLIndex = 0
@@ -15,7 +15,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
 
-    let db = Firestore.firestore()
+//    let db = Firestore.firestore()
 
     let scanTypeLabel: UILabel = {
         let label = UILabel()
@@ -214,28 +214,16 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     private func updateView() {
-        switch currentURLIndex {
-        case 0:
-            scanTypeLabel.text = "PARTICIPANT KIT"
-            scanTypeLabel.textColor = UIColor.white
-            bgView.backgroundColor = UIColor(red: 0.11, green: 0.72, blue: 0.53, alpha: 1.0) // Green
-        case 1:
-            scanTypeLabel.text = "ENTRY"
-            scanTypeLabel.textColor = UIColor.white
-            bgView.backgroundColor = UIColor(red: 0.19, green: 0.56, blue: 0.96, alpha: 1.0) // Blue
-        case 2:
-            scanTypeLabel.text = "MAIN FOOD"
-            scanTypeLabel.textColor = UIColor.white
-            bgView.backgroundColor = UIColor(red: 0.90, green: 0.30, blue: 0.26, alpha: 1.0) // Red
-        case 3:
-            scanTypeLabel.text = "SNACK"
-            scanTypeLabel.textColor = UIColor.white
-            bgView.backgroundColor = UIColor(red: 0.61, green: 0.35, blue: 0.71, alpha: 1.0) // Purple
-        default:
+        guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else {
             scanTypeLabel.text = "ERROR"
-            scanTypeLabel.textColor = UIColor.white
-            bgView.backgroundColor = UIColor.black
+            scanTypeLabel.textColor = .white
+            bgView.backgroundColor = .black
+            return
         }
+
+        scanTypeLabel.text = ticketType.description
+        scanTypeLabel.textColor = .white
+        bgView.backgroundColor = ticketType.backgroundColor
     }
 
     private func failed() {
@@ -325,7 +313,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
+
         let listVC = ListViewController()
+        listVC.currentURLIndex = self.currentURLIndex
         navigationController.pushViewController(listVC, animated: true)
     }
 
@@ -337,19 +327,3 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return .portrait
     }
 }
-
-//extension ViewController {
-//    func createDocument() {
-//        let data: [String: Any] = [
-//            "name": "Tokyo2",
-//            "country": "Japan"
-//        ]
-//        db.collection("cities").document("Tokyo").setData(data) { error in
-//            if let error = error {
-//                print("Error writing document: \(error)")
-//            } else {
-//                print("Document successfully written!")
-//            }
-//        }
-//    }
-//}
