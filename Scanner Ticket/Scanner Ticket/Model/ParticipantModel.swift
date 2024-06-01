@@ -7,20 +7,20 @@
 
 import Foundation
 
-struct Participant: Codable {
-    var documentID: String?
+struct Participant: Hashable {
+    let documentID: String
     let name: String
     let participantKit: Bool
     let entry: Bool
     let mainFood: Bool
     let snack: Bool
-    
-    enum CodingKeys: String, CodingKey {
-        case name
-        case participantKit
-        case entry
-        case mainFood
-        case snack
+
+    static func == (lhs: Participant, rhs: Participant) -> Bool {
+        return lhs.documentID == rhs.documentID
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(documentID)
     }
 }
 

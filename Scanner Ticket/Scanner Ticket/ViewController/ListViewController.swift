@@ -11,12 +11,11 @@ import UIKit
 class ListViewController: UIViewController {
     public var currentURLIndex: Int = 0
     let db = Firestore.firestore()
-    var participants: [String: Participant] = [:]
-    var filteredParticipants: [String: Participant] = [:]
+    var participants: Set<Participant> = []
+    var filteredParticipants: Set<Participant> = []
 
     var tableView = UITableView()
     var searchBar = UISearchBar()
-    var activityIndicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,12 +65,10 @@ class ListViewController: UIViewController {
     }
 
     private func fetchParticipants() {
-        activityIndicator.startAnimating()
         db.collection("Participants")
             .order(by: "name")
             .getDocuments { [weak self] (querySnapshot, error) in
                 guard let self = self else { return }
-                self.activityIndicator.stopAnimating()
                 if let error = error {
                     self.showAlert(message: "Error fetching participants: \(error.localizedDescription)")
                     return
@@ -82,24 +79,23 @@ class ListViewController: UIViewController {
                     return
                 }
 
-                self.participants = documents.reduce(into: [String: Participant]()) { (dict, document) in
+                self.participants = Set(documents.compactMap { document -> Participant? in
                     let data = document.data()
                     if let name = data["name"] as? String,
                        let participantKit = data["participantKit"] as? Bool,
                        let entry = data["entry"] as? Bool,
                        let mainFood = data["mainFood"] as? Bool,
                        let snack = data["snack"] as? Bool {
-                        let participant = Participant(documentID: document.documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
-                        dict[document.documentID] = participant
+                        return Participant(documentID: document.documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
                     }
-                }
-                let sortedParticipants = self.participants.sorted(by: { $0.value.name < $1.value.name })
-                self.filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipants)
+                    return nil
+                })
+
+                self.filteredParticipants = self.participants
 
                 self.tableView.reloadData()
             }
     }
-
 
     private func showAlert(message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
@@ -118,8 +114,8 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
             return UITableViewCell()
         }
 
-        let documentID = Array(filteredParticipants.keys)[indexPath.row]
-        let participant = filteredParticipants[documentID]!
+        let sortedFilteredParticipants = Array(filteredParticipants).sorted(by: { $0.name < $1.name })
+        let participant = sortedFilteredParticipants[indexPath.row]
         let displayValue: Bool
 
         switch TicketTypeEnum(rawValue: currentURLIndex) {
@@ -135,7 +131,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
             displayValue = false
         }
 
-        cell.configure(id: documentID, name: participant.name, value: displayValue)
+        cell.configure(id: participant.documentID, name: participant.name, value: displayValue)
 
         let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
         let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
@@ -151,22 +147,15 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
-            // If search text is empty, show all participants in sorted order by name
-            let sortedParticipantsArray = participants.sorted(by: { $0.value.name < $1.value.name })
-            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedParticipantsArray)
+            filteredParticipants = participants
         } else {
-            // If search text is not empty, filter participants based on search text and maintain sorted order by name
-            let filteredParticipantsArray = participants.filter { (_, participant) in
+            filteredParticipants = participants.filter { participant in
                 let matchesName = participant.name.lowercased().contains(searchText.lowercased())
-                let matchesDocumentID = participant.documentID?.lowercased().contains(searchText.lowercased()) ?? false
+                let matchesDocumentID = participant.documentID.lowercased().contains(searchText.lowercased())
                 return matchesName || matchesDocumentID
             }
-            let sortedFilteredParticipantsArray = filteredParticipantsArray.sorted(by: { $0.value.name < $1.value.name })
-            // Convert the filtered array of tuples into a dictionary for display
-            filteredParticipants = Dictionary(uniqueKeysWithValues: sortedFilteredParticipantsArray)
         }
 
         tableView.reloadData()
     }
 }
-

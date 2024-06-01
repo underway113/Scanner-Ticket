@@ -71,6 +71,14 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Error setting audio session category: \(error.localizedDescription)")
+        }
+        
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
