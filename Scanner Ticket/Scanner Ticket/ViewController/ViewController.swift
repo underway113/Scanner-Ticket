@@ -353,13 +353,29 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
+    // Function to play sound
+    func playSound() {
+        // Set the audio session category to allow playback even when silent
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Error setting audio session category: \(error.localizedDescription)")
+        }
+
+        // Play the sound
+        Sound.play(file: "scanner_sound.mp3")
+    }
+
+
+
     private func showSuccessAlert(with message: String, completion: @escaping () -> Void) {
         let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
             completion()
         })
         
-        Sound.play(file: "scanner_beep.mp3")
+        playSound()
         AudioServicesPlaySystemSound(1520)
         present(alertController, animated: true, completion: nil)
     }
