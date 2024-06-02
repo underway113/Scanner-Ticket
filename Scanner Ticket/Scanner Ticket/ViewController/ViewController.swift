@@ -241,6 +241,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
 
         if (captureSession?.isRunning == false) {
             DispatchQueue.global(qos: .userInitiated).async {
@@ -251,7 +252,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+        
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
