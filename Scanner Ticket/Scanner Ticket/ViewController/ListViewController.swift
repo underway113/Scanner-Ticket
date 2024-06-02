@@ -16,6 +16,7 @@ class ListViewController: UIViewController {
 
     var tableView = UITableView()
     var searchBar = UISearchBar()
+    var emptyImageView = UIImageView()
     var emptyLabel = UILabel()
 
     override func viewDidLoad() {
@@ -23,7 +24,7 @@ class ListViewController: UIViewController {
         setupView()
         setupSearchBar()
         setupTableView()
-        setupEmptyLabel()
+        setupEmptyView()
         fetchParticipants()
     }
 
@@ -39,6 +40,7 @@ class ListViewController: UIViewController {
         }
         title = ticketType.title
         navigationController?.navigationBar.tintColor = .white
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addParticipant))
     }
 
     private func configureViewBackground() {
@@ -75,17 +77,24 @@ class ListViewController: UIViewController {
         tableView.register(ParticipantTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
-    private func setupEmptyLabel() {
+    private func setupEmptyView() {
+        emptyImageView.translatesAutoresizingMaskIntoConstraints = false
+        emptyImageView.image = UIImage(named: "not-found")
+        view.addSubview(emptyImageView)
+
         emptyLabel.text = "Data Not Found"
         emptyLabel.textAlignment = .center
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyLabel)
 
         NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
+            emptyLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 20),
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
 
+        emptyImageView.isHidden = true // Initially hidden
         emptyLabel.isHidden = true // Initially hidden
     }
 
@@ -106,7 +115,7 @@ class ListViewController: UIViewController {
 
                 self.participants = self.parseParticipants(documents)
                 self.filteredParticipants = self.participants
-                self.updateEmptyLabelVisibility()
+                self.updateEmptyViewVisibility()
                 self.tableView.reloadData()
             }
     }
@@ -135,8 +144,30 @@ class ListViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    private func updateEmptyLabelVisibility() {
-        emptyLabel.isHidden = !filteredParticipants.isEmpty
+    private func updateEmptyViewVisibility() {
+        let isEmpty = filteredParticipants.isEmpty
+        emptyImageView.isHidden = !isEmpty
+        emptyLabel.isHidden = !isEmpty
+    }
+
+    @objc private func addParticipant() {
+        let alert = UIAlertController(title: "Add New Participant", message: "Enter name", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            if let name = alert.textFields?.first?.text, !name.isEmpty {
+                let documentID = self.db.collection("Participants").document().documentID
+                let detailVC = DetailViewController()
+                detailVC.documentID = documentID
+                detailVC.name = name
+                detailVC.isNewParticipant = true
+                self.navigationController?.pushViewController(detailVC, animated: true)
+            }
+        }))
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -186,11 +217,24 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        let sortedFilteredParticipants = Array(filteredParticipants).sorted(by: { $0.name < $1.name })
+        let participant = sortedFilteredParticipants[indexPath.row]
+
+        let detailVC = DetailViewController()
+        detailVC.documentID = participant.documentID
+        detailVC.name = participant.name
+        detailVC.participantKit = participant.participantKit
+        detailVC.entry = participant.entry
+        detailVC.mainFood = participant.mainFood
+        detailVC.snack = participant.snack
+
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
-        updateEmptyLabelVisibility()
+        updateEmptyViewVisibility()
         tableView.reloadData()
     }
 
