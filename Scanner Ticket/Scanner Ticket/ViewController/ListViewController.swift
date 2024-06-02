@@ -18,6 +18,8 @@ class ListViewController: UIViewController {
     var searchBar = UISearchBar()
     var emptyImageView = UIImageView()
     var emptyLabel = UILabel()
+    var activityIndicator = UIActivityIndicatorView(style: .large)
+    var refreshControl = UIRefreshControl()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +27,10 @@ class ListViewController: UIViewController {
         setupSearchBar()
         setupTableView()
         setupEmptyView()
+        setupActivityIndicator()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
         fetchParticipants()
     }
 
@@ -62,10 +68,11 @@ class ListViewController: UIViewController {
 
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(tableView)
-
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshParticipants), for: .valueChanged)
+        view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
@@ -78,30 +85,43 @@ class ListViewController: UIViewController {
     }
 
     private func setupEmptyView() {
-        emptyImageView.translatesAutoresizingMaskIntoConstraints = false
-        emptyImageView.image = UIImage(named: "not-found")
-        view.addSubview(emptyImageView)
-
         emptyLabel.text = "Data Not Found"
         emptyLabel.textAlignment = .center
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyImageView.image = UIImage(named: "not-found")
+        emptyImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyLabel)
+        view.addSubview(emptyImageView)
 
         NSLayoutConstraint.activate([
+            emptyImageView.widthAnchor.constraint(equalToConstant: 100),
+            emptyImageView.heightAnchor.constraint(equalToConstant: 100),
             emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
-            emptyLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 20),
+            emptyLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 10),
             emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
 
-        emptyImageView.isHidden = true // Initially hidden
-        emptyLabel.isHidden = true // Initially hidden
+        emptyLabel.isHidden = true
+        emptyImageView.isHidden = true
+    }
+
+    private func setupActivityIndicator() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 
     private func fetchParticipants() {
+        showActivityIndicator()
         db.collection("Participants")
             .order(by: "name")
             .getDocuments { [weak self] (querySnapshot, error) in
+                self?.hideActivityIndicator()
                 guard let self = self else { return }
                 if let error = error {
                     self.showAlert(message: "Error fetching participants: \(error.localizedDescription)")
@@ -159,15 +179,49 @@ class ListViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
             if let name = alert.textFields?.first?.text, !name.isEmpty {
-                let documentID = self.db.collection("Participants").document().documentID
-                let detailVC = DetailViewController()
-                detailVC.documentID = documentID
-                detailVC.name = name
-                detailVC.isNewParticipant = true
-                self.navigationController?.pushViewController(detailVC, animated: true)
+                self.checkIfNameExists(name) { exists in
+                    if exists {
+                        self.showAlert(message: "A participant with this name already exists.")
+                    } else {
+                        let documentID = self.db.collection("Participants").document().documentID
+                        let detailVC = DetailViewController()
+                        detailVC.documentID = documentID
+                        detailVC.name = name
+                        detailVC.isNewParticipant = true
+                        self.navigationController?.pushViewController(detailVC, animated: true)
+                    }
+                }
             }
         }))
         present(alert, animated: true, completion: nil)
+    }
+
+    private func checkIfNameExists(_ name: String, completion: @escaping (Bool) -> Void) {
+        db.collection("Participants").whereField("name", isEqualTo: name).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                self.showAlert(message: "Error checking name: \(error.localizedDescription)")
+                completion(false)
+            } else if let documents = querySnapshot?.documents, !documents.isEmpty {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
+    }
+
+    private func showActivityIndicator() {
+        activityIndicator.startAnimating()
+        tableView.isHidden = true
+    }
+
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+        tableView.isHidden = false
+    }
+
+    @objc private func refreshParticipants() {
+        fetchParticipants()
+        refreshControl.endRefreshing()
     }
 }
 
@@ -218,9 +272,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let sortedFilteredParticipants = Array(filteredParticipants).sorted(by: { $0.name < $1.name })
-        let participant = sortedFilteredParticipants[indexPath.row]
-
+        let participant = getSortedFilteredParticipant(at: indexPath.row)
         let detailVC = DetailViewController()
         detailVC.documentID = participant.documentID
         detailVC.name = participant.name
@@ -228,7 +280,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
         detailVC.entry = participant.entry
         detailVC.mainFood = participant.mainFood
         detailVC.snack = participant.snack
-
+        detailVC.isNewParticipant = false
         navigationController?.pushViewController(detailVC, animated: true)
     }
 
