@@ -146,7 +146,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     private func setupPreviewLayer() {
         previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
         previewLayer.videoGravity = .resizeAspectFill
-        previewLayer.frame = CGRect(x: 0, y: 0, width: 280, height: 280)
+        previewLayer.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
         previewLayer.cornerRadius = 20
         previewLayer.masksToBounds = true
         previewLayer.position = bgView.center

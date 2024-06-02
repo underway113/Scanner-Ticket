@@ -25,7 +25,7 @@ class ListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        configureNavigationBar()
         setupSearchBar()
         setupTableView()
         setupEmptyView()
@@ -36,24 +36,15 @@ class ListViewController: UIViewController {
         fetchParticipants()
     }
 
-    private func setupView() {
-        configureNavigationBar()
-        configureViewBackground()
-    }
-
     private func configureNavigationBar() {
         guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else {
             self.navigationItem.title = "ERROR"
             return
         }
         title = ticketType.title
+        navigationController?.navigationBar.backgroundColor = ticketType.backgroundColor
         navigationController?.navigationBar.tintColor = .white
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addParticipant))
-    }
-
-    private func configureViewBackground() {
-        guard let ticketType = TicketTypeEnum(rawValue: currentURLIndex) else { return }
-        view.backgroundColor = ticketType.backgroundColor
     }
 
     private func setupSearchBar() {
