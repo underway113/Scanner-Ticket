@@ -79,7 +79,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        playSuccessSound()
         setupGestureRecognizers()
         setupCaptureSession()
         setupBackgroundView()
@@ -274,7 +273,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             let components = parseCode(code)
 
             guard let documentID = components.documentID, let name = components.name else {
-                showErrorAlert(with: "\(code)\nInvalid QR Code") {
+                AlertManager.showErrorAlert(with: "\(code)\nInvalid QR Code") {
                     self.viewWillAppear(true)
                 }
                 hideActivityIndicator()
@@ -284,7 +283,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             do {
                 let participant = try await fetchParticipant(documentID: documentID, name: name)
                 guard let participant = participant else {
-                    showErrorAlert(with: "\(code)\nParticipant Not Found") {
+                    AlertManager.showErrorAlert(with: "\(code)\nParticipant Not Found") {
                         self.viewWillAppear(true)
                     }
                     hideActivityIndicator()
@@ -292,17 +291,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 }
 
                 if let fieldValue = getFieldStatus(participant: participant), fieldValue {
-                    showErrorAlert(with: "\(code)\nQR already Scanned!") {
+                    AlertManager.showErrorAlert(with: "\(code)\nQR already Scanned!") {
                         self.viewWillAppear(true)
                     }
                 } else {
                     try await updateField(documentID: documentID)
-                    showSuccessAlert(with: "\(code)\nSuccess Scanned") {
+                    playSuccessSound()
+                    AlertManager.showSuccessAlert(with: "\(code)\nSuccess Scanned") {
                         self.viewWillAppear(true)
                     }
                 }
             } catch {
-                showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
                     self.viewWillAppear(true)
                 }
             }
@@ -370,26 +370,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
 
         Sound.play(file: "scanner_sound.mp3")
-    }
-
-    private func showSuccessAlert(with message: String, completion: @escaping () -> Void) {
-        let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            completion()
-        })
-        
-        playSuccessSound()
-        AudioServicesPlaySystemSound(1520)
-        present(alertController, animated: true, completion: nil)
-    }
-
-    private func showErrorAlert(with message: String, completion: @escaping () -> Void) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            completion()
-        })
-        AudioServicesPlaySystemSound(1521)
-        present(alertController, animated: true, completion: nil)
     }
 
     @objc func listButtonTapped() {

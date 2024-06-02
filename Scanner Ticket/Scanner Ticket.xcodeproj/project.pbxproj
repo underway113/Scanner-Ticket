@@ -20,6 +20,7 @@
 		CBE392C02C0B2313003669C4 /* scanner_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */; };
 		CBE392C32C0B30C4003669C4 /* ParticipantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */; };
 		CBE392C52C0CC054003669C4 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE392C42C0CC054003669C4 /* DetailViewController.swift */; };
+		CBE392C82C0CD0F8003669C4 /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE392C72C0CD0F8003669C4 /* AlertManager.swift */; };
 		CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067C2C0A16A20093F4CB /* ListViewController.swift */; };
 		CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */; };
 		CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */; };
@@ -42,6 +43,7 @@
 		CBE392BF2C0B2313003669C4 /* scanner_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = scanner_sound.mp3; sourceTree = "<group>"; };
 		CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantTableViewCell.swift; sourceTree = "<group>"; };
 		CBE392C42C0CC054003669C4 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
+		CBE392C72C0CD0F8003669C4 /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		CBF2067C2C0A16A20093F4CB /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
 		CBF2067E2C0A253C0093F4CB /* TicketTypeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketTypeEnum.swift; sourceTree = "<group>"; };
 		CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticipantModel.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				CBE392BC2C0B224D003669C4 /* Model */,
 				CBE392BB2C0B223B003669C4 /* Enum */,
 				CBE392BA2C0B2230003669C4 /* ViewController */,
+				CBE392C62C0CD0D9003669C4 /* Utility */,
 				CBCA83752C097DC4006F178E /* AppDelegate.swift */,
 				CBCA83772C097DC4006F178E /* SceneDelegate.swift */,
 				CB51A17D2C09B2C600D1C3F2 /* URLs.swift */,
@@ -156,6 +159,14 @@
 				CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */,
 			);
 			path = ViewCell;
+			sourceTree = "<group>";
+		};
+		CBE392C62C0CD0D9003669C4 /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				CBE392C72C0CD0F8003669C4 /* AlertManager.swift */,
+			);
+			path = Utility;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -279,6 +290,7 @@
 				CBE392C52C0CC054003669C4 /* DetailViewController.swift in Sources */,
 				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
+				CBE392C82C0CD0F8003669C4 /* AlertManager.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
 				CBE392C32C0B30C4003669C4 /* ParticipantTableViewCell.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,

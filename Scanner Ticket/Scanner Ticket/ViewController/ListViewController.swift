@@ -7,8 +7,10 @@
 
 import FirebaseFirestore
 import UIKit
+import AVFoundation
 
 class ListViewController: UIViewController {
+
     public var currentURLIndex: Int = 0
     let db = Firestore.firestore()
     var participants: Set<Participant> = []
@@ -71,6 +73,7 @@ class ListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.refreshControl = refreshControl
+        tableView.keyboardDismissMode = .interactive
         refreshControl.addTarget(self, action: #selector(refreshParticipants), for: .valueChanged)
         view.addSubview(tableView)
 
@@ -124,7 +127,7 @@ class ListViewController: UIViewController {
                 self?.hideActivityIndicator()
                 guard let self = self else { return }
                 if let error = error {
-                    self.showAlert(message: "Error fetching participants: \(error.localizedDescription)")
+                    AlertManager.showErrorAlert(with: "Error fetching participants: \(error.localizedDescription)", completion: {})
                     return
                 }
 
@@ -158,12 +161,6 @@ class ListViewController: UIViewController {
         return Participant(documentID: documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
     }
 
-    private func showAlert(message: String) {
-        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alert, animated: true, completion: nil)
-    }
-
     private func updateEmptyViewVisibility() {
         let isEmpty = filteredParticipants.isEmpty
         emptyImageView.isHidden = !isEmpty
@@ -181,7 +178,7 @@ class ListViewController: UIViewController {
             if let name = alert.textFields?.first?.text, !name.isEmpty {
                 self.checkIfNameExists(name) { exists in
                     if exists {
-                        self.showAlert(message: "A participant with this name already exists.")
+                        AlertManager.showErrorAlert(with: "A participant with this name already exists.", completion: {})
                     } else {
                         let documentID = self.db.collection("Participants").document().documentID
                         let detailVC = DetailViewController()
@@ -199,7 +196,7 @@ class ListViewController: UIViewController {
     private func checkIfNameExists(_ name: String, completion: @escaping (Bool) -> Void) {
         db.collection("Participants").whereField("name", isEqualTo: name).getDocuments { (querySnapshot, error) in
             if let error = error {
-                self.showAlert(message: "Error checking name: \(error.localizedDescription)")
+                AlertManager.showErrorAlert(with: "Error checking name: \(error.localizedDescription)", completion: {})
                 completion(false)
             } else if let documents = querySnapshot?.documents, !documents.isEmpty {
                 completion(true)
