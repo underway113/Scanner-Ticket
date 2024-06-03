@@ -228,8 +228,21 @@ class DetailViewController: UIViewController {
     @objc private func shareQRCode() {
         let img = qrImageView.image
         let name = nameLabel.text ?? ""
-        let id = documentIDLabel.text ?? ""
-        let messageStr = "Participant Name: \(name)\nID: \(id)"
+        let messageStr = """
+            Halo \(name)!
+
+            Kami dengan senang hati mengundang Anda untuk menghadiri *MODA Family Day 2024* yang akan diselenggarakan di 
+                *Trans Studio Cibubur*
+                *27 Juli 2024*
+            Mari kita bersama-sama merayakan hari yang penuh kegembiraan, kebersamaan, dan kenangan indah.
+
+            Silakan bawa QR Code berikut sebagai tiket masuk Anda. Kami tidak sabar untuk melihat Anda di sana dan berbagi momen istimewa bersama seluruh keluarga MODA!
+
+            Sampai jumpa di acara!
+
+            Salam hangat,
+            Keluarga MODA
+            """
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [img!, messageStr], applicationActivities: nil)
         activityViewController.excludedActivityTypes = [.postToWeibo, .postToTwitter, .postToVimeo, .postToFlickr, . postToFacebook]
         self.present(activityViewController, animated: true, completion: nil)
