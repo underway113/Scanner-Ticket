@@ -214,6 +214,7 @@ class ListViewController: UIViewController {
         let alert = UIAlertController(title: "Add New Participant", message: "Enter name", preferredStyle: .alert)
         alert.addTextField { textField in
             textField.placeholder = "Name"
+            textField.autocapitalizationType = .allCharacters
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
