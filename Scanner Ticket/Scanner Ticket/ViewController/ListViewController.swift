@@ -127,29 +127,11 @@ class ListViewController: UIViewController {
                     return
                 }
 
-                self.participants = self.parseParticipants(documents)
+                self.participants = ParticipantUtil.parseToSetParticipants(documents)
                 self.filteredParticipants = self.participants
                 self.updateEmptyViewVisibility()
                 self.tableView.reloadData()
             }
-    }
-
-    private func parseParticipants(_ documents: [QueryDocumentSnapshot]) -> Set<Participant> {
-        return Set(documents.compactMap { document in
-            let data = document.data()
-            return createParticipant(from: data, with: document.documentID)
-        })
-    }
-
-    private func createParticipant(from data: [String: Any], with documentID: String) -> Participant? {
-        guard let name = data["name"] as? String,
-              let participantKit = data["participantKit"] as? Bool,
-              let entry = data["entry"] as? Bool,
-              let mainFood = data["mainFood"] as? Bool,
-              let snack = data["snack"] as? Bool else {
-            return nil
-        }
-        return Participant(documentID: documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
     }
 
     private func updateEmptyViewVisibility() {

@@ -77,6 +77,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return button
     }()
 
+    let exportButton: UIButton = {
+        let button = UIButton(type: .system)
+        let btnImage = UIImage(named: "export-csv")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(btnImage , for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
+        button.layer.cornerRadius = 10
+        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
@@ -86,6 +98,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupScanTypeLabel()
         setupTopLabel()
         setupLastScanLabel()
+        setupExportButton()
         setuplistButton()
         updateView()
     }
@@ -196,10 +209,21 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         view.addSubview(listButton)
         NSLayoutConstraint.activate([
-            listButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            listButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            listButton.trailingAnchor.constraint(equalTo: exportButton.leadingAnchor, constant: -20),
             listButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            listButton.widthAnchor.constraint(equalToConstant: 200),
             listButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupExportButton() {
+        exportButton.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
+        view.addSubview(exportButton)
+        NSLayoutConstraint.activate([
+            exportButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            exportButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            exportButton.widthAnchor.constraint(equalToConstant: 50),
+            exportButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
@@ -253,7 +277,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         navigationController?.setNavigationBarHidden(false, animated: animated)
-        
+
         if (captureSession?.isRunning == true) {
             captureSession.stopRunning()
         }
@@ -387,6 +411,49 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let listVC = ListViewController()
         listVC.currentURLIndex = self.currentURLIndex
         navigationController.pushViewController(listVC, animated: true)
+    }
+
+    @objc func exportButtonTapped() {
+        showActivityIndicator()
+        Task {
+            do {
+                let participantsData = try await self.fetchAllParticipants()
+                let csvString = convertToCSV(participantsData: participantsData)
+                let csvURL = try saveCSVToFile(csvString: csvString)
+                shareCSVFile(csvURL: csvURL)
+            } catch {
+                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                    self.viewWillAppear(true)
+                }
+            }
+            hideActivityIndicator()
+        }
+    }
+
+    private func fetchAllParticipants() async throws -> [Participant] {
+        let querySnapshot = try await db.collection("Participants").order(by: "name").getDocuments()
+        return ParticipantUtil.parseToArrayParticipants(querySnapshot.documents)
+    }
+
+    private func convertToCSV(participantsData: [Participant]) -> String {
+        var csvString = "ID;Name;Participant Kit;Entry;Main Food;Snack\n"
+        for data in participantsData {
+            csvString.append("\(data.documentID);\(data.name);\(data.participantKit);\(data.entry);\(data.mainFood);\(data.snack)\n")
+        }
+        return csvString
+    }
+
+    private func saveCSVToFile(csvString: String) throws -> URL {
+        let fileName = "participantsMODA.csv"
+        let path = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        try csvString.write(to: path, atomically: true, encoding: .utf8)
+        return path
+    }
+
+    private func shareCSVFile(csvURL: URL) {
+        let activityViewController = UIActivityViewController(activityItems: [csvURL], applicationActivities: nil)
+        activityViewController.popoverPresentationController?.sourceView = self.view
+        self.present(activityViewController, animated: true, completion: nil)
     }
 
     private func showActivityIndicator() {
