@@ -62,6 +62,7 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 URLs.swift
+Dummy.swift
 GoogleService-Info.plist
 
 .xcuserstate
