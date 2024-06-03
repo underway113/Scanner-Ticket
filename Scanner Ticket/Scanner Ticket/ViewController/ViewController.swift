@@ -89,6 +89,19 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return button
     }()
 
+    let versionLabel: UILabel = {
+        let label = UILabel()
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            label.text = "v\(version)"
+        } else {
+            print("Unable to fetch the app version.")
+        }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = UIFont.systemFont(ofSize: 10, weight: .thin)
+        return label
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGestureRecognizers()
@@ -100,6 +113,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupLastScanLabel()
         setuplistButton()
         setupExportButton()
+        setupVersionLabel()
         updateView()
     }
 
@@ -205,6 +219,14 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
+    private func setupVersionLabel() {
+        bgView.addSubview(versionLabel)
+        NSLayoutConstraint.activate([
+            versionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            versionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        ])
+    }
+
     private func setuplistButton() {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         view.addSubview(listButton)
@@ -293,7 +315,12 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
+    private func showLastScanLabel(code: String) {
+        lastScanLabel.text = code
+    }
+
     private func found(code: String) {
+        showLastScanLabel(code: code)
         Task {
             showActivityIndicator()
             let components = parseCode(code)
