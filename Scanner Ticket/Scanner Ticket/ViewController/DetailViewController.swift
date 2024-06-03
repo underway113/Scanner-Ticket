@@ -45,6 +45,7 @@ class DetailViewController: UIViewController {
         backButton.title = "Back"
         self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         navigationItem.title = isNewParticipant ? "New Participant" : "Detail"
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(shareQRCode))
 
         // Configure labels and toggles
         configureLabel(nameLabel, text: "name", fontSize: 30, bold: true, align: .center)
@@ -157,7 +158,7 @@ class DetailViewController: UIViewController {
         snackToggle.isOn = snack
 
         let QRimage = generateQRCode(from: "\(documentID)_\(name)")
-        self.qrImageView.image = QRimage
+        qrImageView.image = QRimage
     }
 
     @objc private func toggleChanged(_ sender: UISwitch) {
@@ -215,12 +216,22 @@ class DetailViewController: UIViewController {
             QRFilter.setValue(data, forKey: "inputMessage")
             guard let QRImage = QRFilter.outputImage else {return nil}
 
-            let transformScale = CGAffineTransform(scaleX: 15.0, y: 15.0)
+            let transformScale = CGAffineTransform(scaleX: 12.0, y: 12.0)
             let scaledQRImage = QRImage.transformed(by: transformScale)
 
             return UIImage(ciImage: scaledQRImage)
         }
         return nil
+    }
+
+    @objc private func shareQRCode() {
+        let img = qrImageView.image
+        let name = nameLabel.text ?? ""
+        let id = documentIDLabel.text ?? ""
+        let messageStr = "Participant Name: \(name)\nID: \(id)"
+        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [img!, messageStr], applicationActivities: nil)
+        activityViewController.excludedActivityTypes = [.postToWeibo, .postToTwitter, .postToVimeo, .postToFlickr, . postToFacebook]
+        self.present(activityViewController, animated: true, completion: nil)
     }
 }
 
