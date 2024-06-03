@@ -29,6 +29,7 @@ class DetailViewController: UIViewController {
     private let mainFoodToggle = UISwitch()
     private let snackLabel = UILabel()
     private let snackToggle = UISwitch()
+    private let qrImageView = UIImageView()
     private let saveButton = UIButton(type: .system)
 
     override func viewDidLoad() {
@@ -40,19 +41,23 @@ class DetailViewController: UIViewController {
 
     private func setupView() {
         view.backgroundColor = .black
+        let backButton = UIBarButtonItem()
+        backButton.title = "Back"
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
         navigationItem.title = isNewParticipant ? "New Participant" : "Detail"
 
         // Configure labels and toggles
-        configureLabel(nameLabel, text: "Name: \(name)", fontSize: 18, bold: true)
-        configureLabel(documentIDLabel, text: "Document ID: \(documentID)", fontSize: 16, bold: false)
-        configureLabel(participantKitLabel, text: "Participant Kit", fontSize: 16, bold: false)
+        configureLabel(nameLabel, text: "name", fontSize: 30, bold: true, align: .center)
+        configureLabel(documentIDLabel, text: documentID, fontSize: 18, bold: false, align: .center)
+        configureLabel(participantKitLabel, text: "Participant Kit", fontSize: 18, bold: false)
         configureToggle(participantKitToggle, isOn: participantKit, action: #selector(toggleChanged))
-        configureLabel(entryLabel, text: "Entry", fontSize: 16, bold: false)
+        configureLabel(entryLabel, text: "Entry", fontSize: 18, bold: false)
         configureToggle(entryToggle, isOn: entry, action: #selector(toggleChanged))
-        configureLabel(mainFoodLabel, text: "Main Food", fontSize: 16, bold: false)
+        configureLabel(mainFoodLabel, text: "Main Food", fontSize: 18, bold: false)
         configureToggle(mainFoodToggle, isOn: mainFood, action: #selector(toggleChanged))
-        configureLabel(snackLabel, text: "Snack", fontSize: 16, bold: false)
+        configureLabel(snackLabel, text: "Snack", fontSize: 18, bold: false)
         configureToggle(snackToggle, isOn: snack, action: #selector(toggleChanged))
+        configureImageView(qrImageView, image: "not-found")
 
         // Configure save button
         saveButton.setTitle("Save", for: .normal)
@@ -68,8 +73,10 @@ class DetailViewController: UIViewController {
             nameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            documentIDLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 20),
+            documentIDLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10),
+            documentIDLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             documentIDLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             documentIDLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
@@ -97,15 +104,22 @@ class DetailViewController: UIViewController {
             snackToggle.centerYAnchor.constraint(equalTo: snackLabel.centerYAnchor),
             snackToggle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
-            saveButton.topAnchor.constraint(equalTo: snackLabel.bottomAnchor, constant: 50),
+            qrImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            qrImageView.widthAnchor.constraint(equalToConstant: 250),
+            qrImageView.heightAnchor.constraint(equalToConstant: 250),
+            qrImageView.topAnchor.constraint(equalTo: snackLabel.bottomAnchor, constant: 50),
+
+            saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            saveButton.widthAnchor.constraint(equalToConstant: 200),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             saveButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
-    private func configureLabel(_ label: UILabel, text: String, fontSize: CGFloat, bold: Bool) {
+    private func configureLabel(_ label: UILabel, text: String, fontSize: CGFloat, bold: Bool, align: NSTextAlignment = .left) {
         label.text = text
+        label.textAlignment = align
         label.textColor = .white
         label.font = bold ? UIFont.boldSystemFont(ofSize: fontSize) : UIFont.systemFont(ofSize: fontSize)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -119,6 +133,13 @@ class DetailViewController: UIViewController {
         view.addSubview(toggle)
     }
 
+    private func configureImageView(_ imageView: UIImageView, image: String) {
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.image = UIImage(named: "not-found")
+        view.addSubview(imageView)
+    }
+
     private func configureSaveButton() {
         saveButton.setTitle("Save", for: .normal)
         saveButton.backgroundColor = .systemBlue
@@ -128,12 +149,15 @@ class DetailViewController: UIViewController {
     }
 
     private func populateFields() {
-        nameLabel.text = "Name: \(name)"
-        documentIDLabel.text = "Document ID: \(documentID)"
+        nameLabel.text = "\(name)"
+        documentIDLabel.text = "\(documentID)"
         participantKitToggle.isOn = participantKit
         entryToggle.isOn = entry
         mainFoodToggle.isOn = mainFood
         snackToggle.isOn = snack
+
+        let QRimage = generateQRCode(from: "\(documentID)_\(name)")
+        self.qrImageView.image = QRimage
     }
 
     @objc private func toggleChanged(_ sender: UISwitch) {
@@ -183,6 +207,20 @@ class DetailViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+
+    func generateQRCode(from string: String) -> UIImage? {
+        let data = string.data(using: String.Encoding.ascii)
+        if let QRFilter = CIFilter(name: "CIQRCodeGenerator") {
+            QRFilter.setValue(data, forKey: "inputMessage")
+            guard let QRImage = QRFilter.outputImage else {return nil}
+
+            let transformScale = CGAffineTransform(scaleX: 15.0, y: 15.0)
+            let scaledQRImage = QRImage.transformed(by: transformScale)
+
+            return UIImage(ciImage: scaledQRImage)
+        }
+        return nil
     }
 }
 
