@@ -25,11 +25,18 @@ class ListViewController: UIViewController {
     var emptyLabel = UILabel()
     var activityIndicator = UIActivityIndicatorView(style: .large)
     var refreshControl = UIRefreshControl()
+    var filterButton = UIButton(type: .system)
+    var filterMode: FilterMode = .all
+
+    enum FilterMode {
+        case all, trueOnly, falseOnly
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar()
         setupSearchBar()
+        setupFilterButton()
         setupInfoView()
         setupTableView()
         setupEmptyView()
@@ -59,7 +66,6 @@ class ListViewController: UIViewController {
         NSLayoutConstraint.activate([
             searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 
@@ -138,6 +144,23 @@ class ListViewController: UIViewController {
         ])
     }
 
+    private func setupFilterButton() {
+        let btnImage = UIImage(named: "filter-all")
+        filterButton.tintColor = .white
+        filterButton.setImage(btnImage , for: .normal)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(filterButton)
+
+        NSLayoutConstraint.activate([
+            filterButton.centerYAnchor.constraint(equalTo: searchBar.centerYAnchor),
+            filterButton.leadingAnchor.constraint(equalTo: searchBar.trailingAnchor, constant: 8),
+            filterButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            filterButton.widthAnchor.constraint(equalToConstant: 24),
+            filterButton.heightAnchor.constraint(equalToConstant: 24)
+        ])
+    }
+
     private func fetchParticipants() {
         showActivityIndicator()
         db.collection("Participants")
@@ -156,7 +179,7 @@ class ListViewController: UIViewController {
                 }
 
                 self.participants = ParticipantUtil.parseToSetParticipants(documents)
-                self.filteredParticipants = self.participants
+                self.applyFilter()
                 self.updateEmptyViewVisibility()
                 self.updateInfoLabels()
                 self.tableView.reloadData()
@@ -253,6 +276,37 @@ class ListViewController: UIViewController {
         fetchParticipants()
         refreshControl.endRefreshing()
     }
+
+    @objc private func filterButtonTapped() {
+        switch filterMode {
+        case .all:
+            filterMode = .trueOnly
+        case .trueOnly:
+            filterMode = .falseOnly
+        case .falseOnly:
+            filterMode = .all
+        }
+        applyFilter()
+        tableView.reloadData()
+    }
+
+    private func applyFilter() {
+        switch filterMode {
+        case .all:
+            let btnImage = UIImage(named: "filter-all")
+            filterButton.setImage(btnImage , for: .normal)
+            filteredParticipants = participants
+        case .trueOnly:
+            let btnImage = UIImage(named: "check-white")
+            filterButton.setImage(btnImage , for: .normal)
+            filteredParticipants = participants.filter { getDisplayValue(for: $0) }
+        case .falseOnly:
+            let btnImage = UIImage(named: "cross-white")
+            filterButton.setImage(btnImage , for: .normal)
+            filteredParticipants = participants.filter { !getDisplayValue(for: $0) }
+        }
+        updateEmptyViewVisibility()
+    }
 }
 
 extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
@@ -316,6 +370,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
+        filterButton.setTitle("ALL", for: .normal)
         updateEmptyViewVisibility()
         updateInfoLabels()
         tableView.reloadData()

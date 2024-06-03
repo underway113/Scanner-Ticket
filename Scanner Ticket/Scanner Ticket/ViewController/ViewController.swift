@@ -69,7 +69,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     let listButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("List", for: .normal)
+        button.setTitle("LIST", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .white
