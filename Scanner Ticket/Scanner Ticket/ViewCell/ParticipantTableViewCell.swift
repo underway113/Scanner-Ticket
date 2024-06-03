@@ -48,7 +48,7 @@ class ParticipantTableViewCell: UITableViewCell {
 
         NSLayoutConstraint.activate([
             documentIDLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            documentIDLabel.widthAnchor.constraint(equalToConstant: 80),
+            documentIDLabel.widthAnchor.constraint(equalToConstant: 70),
             documentIDLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
             nameLabel.leadingAnchor.constraint(equalTo: documentIDLabel.trailingAnchor, constant: 16),

@@ -148,45 +148,58 @@ class ListViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "Add", style: .default, handler: { [weak self] _ in
             guard let self = self else { return }
-            if let name = alert.textFields?.first?.text, !name.isEmpty {
-                self.checkIfNameExists(name) { exists in
-                    if exists {
-                        AlertManager.showErrorAlert(with: "A participant with this name already exists.", completion: {})
-                    } else {
-                        let documentID = self.db.collection("Participants").document().documentID
-                        let detailVC = DetailViewController()
-                        detailVC.documentID = documentID
-                        detailVC.name = name
-                        detailVC.isNewParticipant = true
-                        self.navigationController?.pushViewController(detailVC, animated: true)
+            showActivityIndicator()
+            Task {
+                if let name = alert.textFields?.first?.text, !name.isEmpty {
+                    do {
+                        let exists = try await self.checkIfNameExists(name)
+                        if exists {
+                            self.hideActivityIndicator()
+                            AlertManager.showErrorAlert(with: "A participant with this name already exists.", completion: {})
+                        } 
+                        else {
+                            var newDocumentID: String
+                            var isUnique: Bool
+                            repeat {
+                                newDocumentID = String.randomDocumentID(length: 5)
+                                isUnique = try await self.checkDocumentIDExists(documentID: newDocumentID)
+                            } while !isUnique
+
+                            let detailVC = DetailViewController()
+                            detailVC.documentID = newDocumentID
+                            detailVC.name = name
+                            detailVC.isNewParticipant = true
+                            self.navigationController?.pushViewController(detailVC, animated: true)
+                        }
+                    } 
+                    catch {
+                        self.hideActivityIndicator()
+                        AlertManager.showErrorAlert(with: "Error checking name: \(error.localizedDescription)", completion: {})
                     }
                 }
             }
         }))
+        hideActivityIndicator()
         present(alert, animated: true, completion: nil)
     }
 
-    private func checkIfNameExists(_ name: String, completion: @escaping (Bool) -> Void) {
-        db.collection("Participants").whereField("name", isEqualTo: name).getDocuments { (querySnapshot, error) in
-            if let error = error {
-                AlertManager.showErrorAlert(with: "Error checking name: \(error.localizedDescription)", completion: {})
-                completion(false)
-            } else if let documents = querySnapshot?.documents, !documents.isEmpty {
-                completion(true)
-            } else {
-                completion(false)
-            }
-        }
+    private func checkDocumentIDExists(documentID: String) async throws -> Bool {
+        let docRef = db.collection("Participants").document(documentID)
+        let document = try await docRef.getDocument()
+        return !document.exists
+    }
+
+    private func checkIfNameExists(_ name: String) async throws -> Bool {
+        let querySnapshot = try await db.collection("Participants").whereField("name", isEqualTo: name).getDocuments()
+        return !querySnapshot.documents.isEmpty
     }
 
     private func showActivityIndicator() {
         activityIndicator.startAnimating()
-        tableView.isHidden = true
     }
 
     private func hideActivityIndicator() {
         activityIndicator.stopAnimating()
-        tableView.isHidden = false
     }
 
     @objc private func refreshParticipants() {

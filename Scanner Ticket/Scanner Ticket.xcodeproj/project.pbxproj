@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD2E2C0DA31600F77527 /* StringExtension.swift */; };
 		CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */; };
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
 		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
@@ -30,6 +31,7 @@
 		479D0EEDAF1A103AD4F81285 /* Pods_Scanner_Ticket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scanner_Ticket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A51E6F2385F1786FD73691C /* Pods-Scanner Ticket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.release.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.release.xcconfig"; sourceTree = "<group>"; };
 		CA4E90D8B0E0B33F01BAAA52 /* Pods-Scanner Ticket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.debug.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.debug.xcconfig"; sourceTree = "<group>"; };
+		CB17DD2E2C0DA31600F77527 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
@@ -101,11 +103,11 @@
 		CBCA83742C097DC4006F178E /* Scanner Ticket */ = {
 			isa = PBXGroup;
 			children = (
-				CBE392C12C0B30B3003669C4 /* ViewCell */,
 				CBE392BD2C0B2251003669C4 /* Asset */,
 				CBE392BC2C0B224D003669C4 /* Model */,
 				CBE392BB2C0B223B003669C4 /* Enum */,
 				CBE392BA2C0B2230003669C4 /* ViewController */,
+				CBE392C12C0B30B3003669C4 /* ViewCell */,
 				CBE392C62C0CD0D9003669C4 /* Utility */,
 				CBCA83752C097DC4006F178E /* AppDelegate.swift */,
 				CBCA83772C097DC4006F178E /* SceneDelegate.swift */,
@@ -165,6 +167,7 @@
 			isa = PBXGroup;
 			children = (
 				CBE392C72C0CD0F8003669C4 /* AlertManager.swift */,
+				CB17DD2E2C0DA31600F77527 /* StringExtension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -296,6 +299,7 @@
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
 				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
 				CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */,
+				CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */,
 				CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

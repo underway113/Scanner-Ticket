@@ -98,8 +98,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupScanTypeLabel()
         setupTopLabel()
         setupLastScanLabel()
-        setupExportButton()
         setuplistButton()
+        setupExportButton()
         updateView()
     }
 
@@ -209,8 +209,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         view.addSubview(listButton)
         NSLayoutConstraint.activate([
-            listButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            listButton.trailingAnchor.constraint(equalTo: exportButton.leadingAnchor, constant: -20),
+            listButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             listButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             listButton.heightAnchor.constraint(equalToConstant: 50)
         ])
@@ -220,7 +219,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         exportButton.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
         view.addSubview(exportButton)
         NSLayoutConstraint.activate([
-            exportButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            exportButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            exportButton.trailingAnchor.constraint(equalTo: listButton.leadingAnchor, constant: -20),
             exportButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             exportButton.widthAnchor.constraint(equalToConstant: 50),
             exportButton.heightAnchor.constraint(equalToConstant: 50)
