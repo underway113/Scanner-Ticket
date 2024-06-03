@@ -61,7 +61,8 @@ class DetailViewController: UIViewController {
         configureImageView(qrImageView, image: "not-found")
 
         // Configure save button
-        saveButton.setTitle("Save", for: .normal)
+        saveButton.setTitle("SAVE", for: .normal)
+        saveButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 22)
         saveButton.backgroundColor = .systemBlue
         saveButton.layer.cornerRadius = 8
         saveButton.tintColor = .white

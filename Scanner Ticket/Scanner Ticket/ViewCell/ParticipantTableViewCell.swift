@@ -47,14 +47,15 @@ class ParticipantTableViewCell: UITableViewCell {
         addSubview(checkmarkImageView)
 
         NSLayoutConstraint.activate([
-            documentIDLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            documentIDLabel.widthAnchor.constraint(equalToConstant: 70),
+            documentIDLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            documentIDLabel.widthAnchor.constraint(equalToConstant: 60),
             documentIDLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            nameLabel.leadingAnchor.constraint(equalTo: documentIDLabel.trailingAnchor, constant: 16),
+            nameLabel.leadingAnchor.constraint(equalTo: documentIDLabel.trailingAnchor, constant: 8),
+            nameLabel.trailingAnchor.constraint(equalTo: checkmarkImageView.leadingAnchor, constant: -8),
             nameLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
 
-            checkmarkImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+            checkmarkImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
             checkmarkImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
             checkmarkImageView.widthAnchor.constraint(equalToConstant: 24),
             checkmarkImageView.heightAnchor.constraint(equalToConstant: 24)

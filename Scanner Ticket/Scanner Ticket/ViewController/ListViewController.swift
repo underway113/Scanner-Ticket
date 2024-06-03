@@ -18,6 +18,9 @@ class ListViewController: UIViewController {
 
     var tableView = UITableView()
     var searchBar = UISearchBar()
+    var infoView = UIView()
+    var totalParticipantsLabel = UILabel()
+    var statusLabel = UILabel()
     var emptyImageView = UIImageView()
     var emptyLabel = UILabel()
     var activityIndicator = UIActivityIndicatorView(style: .large)
@@ -27,6 +30,7 @@ class ListViewController: UIViewController {
         super.viewDidLoad()
         configureNavigationBar()
         setupSearchBar()
+        setupInfoView()
         setupTableView()
         setupEmptyView()
         setupActivityIndicator()
@@ -59,6 +63,30 @@ class ListViewController: UIViewController {
         ])
     }
 
+    private func setupInfoView() {
+        infoView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(infoView)
+
+        totalParticipantsLabel.translatesAutoresizingMaskIntoConstraints = false
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+
+        infoView.addSubview(totalParticipantsLabel)
+        infoView.addSubview(statusLabel)
+
+        NSLayoutConstraint.activate([
+            infoView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            infoView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            infoView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            infoView.heightAnchor.constraint(equalToConstant: 50),
+
+            totalParticipantsLabel.leadingAnchor.constraint(equalTo: infoView.leadingAnchor),
+            totalParticipantsLabel.centerYAnchor.constraint(equalTo: infoView.centerYAnchor),
+
+            statusLabel.trailingAnchor.constraint(equalTo: infoView.trailingAnchor),
+            statusLabel.centerYAnchor.constraint(equalTo: infoView.centerYAnchor)
+        ])
+    }
+
     private func setupTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
@@ -69,7 +97,7 @@ class ListViewController: UIViewController {
         view.addSubview(tableView)
 
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: infoView.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -130,6 +158,7 @@ class ListViewController: UIViewController {
                 self.participants = ParticipantUtil.parseToSetParticipants(documents)
                 self.filteredParticipants = self.participants
                 self.updateEmptyViewVisibility()
+                self.updateInfoLabels()
                 self.tableView.reloadData()
             }
     }
@@ -138,6 +167,24 @@ class ListViewController: UIViewController {
         let isEmpty = filteredParticipants.isEmpty
         emptyImageView.isHidden = !isEmpty
         emptyLabel.isHidden = !isEmpty
+    }
+
+    private func updateInfoLabels() {
+        let totalParticipants = participants.count
+        var trueCount = 0
+        var falseCount = 0
+
+        for participant in participants {
+            let value = getDisplayValue(for: participant)
+            if value {
+                trueCount += 1
+            } else {
+                falseCount += 1
+            }
+        }
+
+        totalParticipantsLabel.text = "Total: \(totalParticipants)"
+        statusLabel.text = "\(trueCount) scanned / \(falseCount) not scanned"
     }
 
     @objc private func addParticipant() {
@@ -270,6 +317,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
         updateEmptyViewVisibility()
+        updateInfoLabels()
         tableView.reloadData()
     }
 
