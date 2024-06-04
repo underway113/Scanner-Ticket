@@ -22,7 +22,6 @@ This application is ideal for:
 
 ## Screenshot
 
-![58shots_so](https://github.com/underway113/Scanner-ticket/assets/17544780/b920eba5-b045-43b8-a7a4-441a8d110bbe)
+![725shots_so (1)](https://github.com/underway113/Scanner-ticket/assets/17544780/1a8c99f5-25dd-4073-921d-86e68f95551f)
 
-![550shots_so](https://github.com/underway113/Scanner-ticket/assets/17544780/54bcca92-7545-44f6-bd8b-7bf5392e8c0a)
-
+![701shots_so (1)](https://github.com/underway113/Scanner-ticket/assets/17544780/aaf0b404-36f0-4eb9-8420-c3e48c166599)
