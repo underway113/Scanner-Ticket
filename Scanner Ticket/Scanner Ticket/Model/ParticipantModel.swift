@@ -29,14 +29,14 @@ struct Participant: Hashable {
 
 class ParticipantUtil {
 
-    static func parseToSetParticipants(_ documents: [QueryDocumentSnapshot]) -> Set<Participant> {
+    static func parseToSet(_ documents: [QueryDocumentSnapshot]) -> Set<Participant> {
         return Set(documents.compactMap { document in
             let data = document.data()
             return createParticipant(from: data, with: document.documentID)
         })
     }
 
-    static func parseToArrayParticipants(_ documents: [QueryDocumentSnapshot]) -> [Participant] {
+    static func parseToArray(_ documents: [QueryDocumentSnapshot]) -> [Participant] {
         return Array(documents.compactMap { document in
             let data = document.data()
             return createParticipant(from: data, with: document.documentID)

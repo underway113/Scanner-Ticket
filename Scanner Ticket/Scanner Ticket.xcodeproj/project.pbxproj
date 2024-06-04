@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD2E2C0DA31600F77527 /* StringExtension.swift */; };
 		CB17DD312C0DAE8600F77527 /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD302C0DAE8600F77527 /* Dummy.swift */; };
+		CB17DD332C0EBF7800F77527 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */; };
+		CB17DD352C0EBF9500F77527 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD342C0EBF9500F77527 /* TransactionModel.swift */; };
+		CB17DD372C0EC63500F77527 /* TransactionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD362C0EC63500F77527 /* TransactionViewCell.swift */; };
 		CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */; };
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
 		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
@@ -34,6 +37,9 @@
 		CA4E90D8B0E0B33F01BAAA52 /* Pods-Scanner Ticket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.debug.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.debug.xcconfig"; sourceTree = "<group>"; };
 		CB17DD2E2C0DA31600F77527 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CB17DD302C0DAE8600F77527 /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
+		CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListViewController.swift; sourceTree = "<group>"; };
+		CB17DD342C0EBF9500F77527 /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
+		CB17DD362C0EC63500F77527 /* TransactionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewCell.swift; sourceTree = "<group>"; };
 		CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
@@ -129,6 +135,7 @@
 				CBCA83792C097DC4006F178E /* ViewController.swift */,
 				CBF2067C2C0A16A20093F4CB /* ListViewController.swift */,
 				CBE392C42C0CC054003669C4 /* DetailViewController.swift */,
+				CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -145,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				CBF206802C0A2A3A0093F4CB /* ParticipantModel.swift */,
+				CB17DD342C0EBF9500F77527 /* TransactionModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -162,6 +170,7 @@
 			isa = PBXGroup;
 			children = (
 				CBE392C22C0B30C4003669C4 /* ParticipantTableViewCell.swift */,
+				CB17DD362C0EC63500F77527 /* TransactionViewCell.swift */,
 			);
 			path = ViewCell;
 			sourceTree = "<group>";
@@ -294,15 +303,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBE392C52C0CC054003669C4 /* DetailViewController.swift in Sources */,
+				CB17DD372C0EC63500F77527 /* TransactionViewCell.swift in Sources */,
 				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBE392C82C0CD0F8003669C4 /* AlertManager.swift in Sources */,
+				CB17DD352C0EBF9500F77527 /* TransactionModel.swift in Sources */,
 				CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */,
 				CBE392C32C0B30C4003669C4 /* ParticipantTableViewCell.swift in Sources */,
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
 				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
 				CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */,
 				CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */,
+				CB17DD332C0EBF7800F77527 /* TransactionListViewController.swift in Sources */,
 				CB17DD312C0DAE8600F77527 /* Dummy.swift in Sources */,
 				CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */,
 			);

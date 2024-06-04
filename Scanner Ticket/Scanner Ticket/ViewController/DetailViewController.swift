@@ -15,6 +15,12 @@ class DetailViewController: UIViewController {
     var entry: Bool = false
     var mainFood: Bool = false
     var snack: Bool = false
+
+    var existParticipantKit: Bool = false
+    var existEntry: Bool = false
+    var existMainFood: Bool = false
+    var existSnack: Bool = false
+    
     var isNewParticipant: Bool = false
 
     let db = Firestore.firestore()
@@ -190,10 +196,46 @@ class DetailViewController: UIViewController {
             db.collection("Participants").document(documentID).setData(data) { [weak self] error in
                 self?.handleSaveResult(error: error)
             }
-        } else {
+
+            let dataTransaction: [String: Any] = [
+                "participantKit": participantKit,
+                "entry": entry,
+                "mainFood": mainFood,
+                "snack": snack
+            ]
+            addTransaction(
+                transaction: Transaction(
+                    transactionType: "add",
+                    participantName: name,
+                    transactionDetails: dataTransaction
+                )
+            )
+        }
+        else {
             db.collection("Participants").document(documentID).updateData(data) { [weak self] error in
                 self?.handleSaveResult(error: error)
             }
+
+            var dataTransaction: [String: Any] = [:]
+            if existParticipantKit != participantKit {
+                dataTransaction["participantKit"] = participantKit
+            }
+            if existEntry != entry {
+                dataTransaction["entry"] = entry
+            }
+            if existMainFood != mainFood {
+                dataTransaction["mainFood"] = mainFood
+            }
+            if existSnack != snack {
+                dataTransaction["snack"] = snack
+            }
+            addTransaction(
+                transaction: Transaction(
+                    transactionType: "update",
+                    participantName: name,
+                    transactionDetails: dataTransaction
+                )
+            )
         }
     }
 
@@ -209,6 +251,16 @@ class DetailViewController: UIViewController {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
+    }
+
+    private func addTransaction(transaction: Transaction) {
+        db.collection("Transactions").addDocument(data: transaction.toDictionary()) { err in
+            if let err = err {
+                print("Error adding transaction: \(err)")
+            } else {
+                print("Transaction successfully added!")
+            }
+        }
     }
 
     func generateQRCode(from string: String) -> UIImage? {

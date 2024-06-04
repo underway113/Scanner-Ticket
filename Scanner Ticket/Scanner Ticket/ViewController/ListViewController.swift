@@ -178,7 +178,7 @@ class ListViewController: UIViewController {
                     return
                 }
 
-                self.participants = ParticipantUtil.parseToSetParticipants(documents)
+                self.participants = ParticipantUtil.parseToSet(documents)
                 self.applyFilter()
                 self.updateEmptyViewVisibility()
                 self.updateInfoLabels()
@@ -365,6 +365,10 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
         detailVC.entry = participant.entry
         detailVC.mainFood = participant.mainFood
         detailVC.snack = participant.snack
+        detailVC.existParticipantKit = detailVC.participantKit
+        detailVC.existEntry = detailVC.entry
+        detailVC.existMainFood = detailVC.mainFood
+        detailVC.existSnack = detailVC.snack
         detailVC.isNewParticipant = false
         navigationController?.pushViewController(detailVC, animated: true)
     }

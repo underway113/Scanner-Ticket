@@ -66,10 +66,10 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return view
     }()
 
-    let listButton: UIButton = {
+    let participantListButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("LIST", for: .normal)
+        button.setTitle("PARTICIPANTS", for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         button.setTitleColor(.black, for: .normal)
         button.backgroundColor = .white
@@ -77,7 +77,18 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return button
     }()
 
-    let exportButton: UIButton = {
+    let transactionListButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("TRANSACTIONS", for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 10
+        return button
+    }()
+
+    let exportParticipantButton: UIButton = {
         let button = UIButton(type: .system)
         let btnImage = UIImage(named: "export-csv")
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -88,6 +99,19 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
         return button
     }()
+
+    let exportTransactionButton: UIButton = {
+        let button = UIButton(type: .system)
+        let btnImage = UIImage(named: "export-csv")
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(btnImage , for: .normal)
+        button.backgroundColor = .white
+        button.tintColor = .black
+        button.layer.cornerRadius = 10
+        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        return button
+    }()
+
 
     let versionLabel: UILabel = {
         let label = UILabel()
@@ -111,9 +135,11 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupScanTypeLabel()
         setupTopLabel()
         setupLastScanLabel()
-        setuplistButton()
-        setupExportButton()
+        setupParticipantListButton()
+        setupExportParticipantButton()
         setupVersionLabel()
+        setupTransactionsListButton()
+        setupExportTransactionButton()
         updateView()
     }
 
@@ -219,6 +245,17 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
+    private func setupTransactionsListButton() {
+        transactionListButton.addTarget(self, action: #selector(transactionsListButtonTapped), for: .touchUpInside)
+        bgView.addSubview(transactionListButton)
+
+        NSLayoutConstraint.activate([
+            transactionListButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            transactionListButton.heightAnchor.constraint(equalToConstant: 50),
+            transactionListButton.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -10)
+        ])
+    }
+
     private func setupVersionLabel() {
         bgView.addSubview(versionLabel)
         NSLayoutConstraint.activate([
@@ -227,25 +264,37 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
-    private func setuplistButton() {
-        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
-        view.addSubview(listButton)
+    private func setupParticipantListButton() {
+        participantListButton.addTarget(self, action: #selector(participantListButtonTapped), for: .touchUpInside)
+        view.addSubview(participantListButton)
         NSLayoutConstraint.activate([
-            listButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            listButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            listButton.heightAnchor.constraint(equalToConstant: 50)
+            participantListButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            participantListButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            participantListButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
-    private func setupExportButton() {
-        exportButton.addTarget(self, action: #selector(exportButtonTapped), for: .touchUpInside)
-        view.addSubview(exportButton)
+    private func setupExportParticipantButton() {
+        exportParticipantButton.addTarget(self, action: #selector(exportParticipantButtonTapped), for: .touchUpInside)
+        view.addSubview(exportParticipantButton)
         NSLayoutConstraint.activate([
-            exportButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            exportButton.trailingAnchor.constraint(equalTo: listButton.leadingAnchor, constant: -20),
-            exportButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
-            exportButton.widthAnchor.constraint(equalToConstant: 50),
-            exportButton.heightAnchor.constraint(equalToConstant: 50)
+            exportParticipantButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            exportParticipantButton.trailingAnchor.constraint(equalTo: participantListButton.leadingAnchor, constant: -20),
+            exportParticipantButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            exportParticipantButton.widthAnchor.constraint(equalToConstant: 50),
+            exportParticipantButton.heightAnchor.constraint(equalToConstant: 50)
+        ])
+    }
+
+    private func setupExportTransactionButton() {
+        exportTransactionButton.addTarget(self, action: #selector(exportTransactionButtonTapped), for: .touchUpInside)
+        view.addSubview(exportTransactionButton)
+        NSLayoutConstraint.activate([
+            exportTransactionButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            exportTransactionButton.trailingAnchor.constraint(equalTo: transactionListButton.leadingAnchor, constant: -20),
+            exportTransactionButton.bottomAnchor.constraint(equalTo: versionLabel.topAnchor, constant: -10),
+            exportTransactionButton.widthAnchor.constraint(equalToConstant: 50),
+            exportTransactionButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 
@@ -348,7 +397,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         self.viewWillAppear(true)
                     }
                 } else {
-                    try await updateField(documentID: documentID)
+                    try await updateField(documentID: documentID, name: name)
                     playSuccessSound()
                     AlertManager.showSuccessAlert(with: "\(code)\nSuccess Scanned") {
                         self.viewWillAppear(true)
@@ -388,13 +437,30 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return participant[fieldName] as? Bool
     }
 
-    private func updateField(documentID: String) async throws {
+    private func updateField(documentID: String, name: String) async throws {
         guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
             return
         }
         let fieldName = ticketType.description
         let docRef = db.collection("Participants").document(documentID)
         try await docRef.updateData([fieldName: true])
+        addTransaction(
+            transaction: Transaction(
+                transactionType: "update",
+                participantName: name,
+                transactionDetails: [fieldName: true]
+            )
+        )
+    }
+
+    private func addTransaction(transaction: Transaction) {
+        db.collection("Transactions").addDocument(data: transaction.toDictionary()) { err in
+            if let err = err {
+                print("Error adding transaction: \(err)")
+            } else {
+                print("Transaction successfully added!")
+            }
+        }
     }
 
     private func entryFieldName(for index: Int) -> String {
@@ -425,7 +491,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         Sound.play(file: "scanner_sound.mp3")
     }
 
-    @objc func listButtonTapped() {
+    @objc func participantListButtonTapped() {
         guard let navigationController = navigationController else {
             print("Navigation controller is nil.")
             return
@@ -440,8 +506,26 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         navigationController.pushViewController(listVC, animated: true)
     }
 
-    @objc func exportButtonTapped() {
+    @objc func transactionsListButtonTapped() {
+        guard let navigationController = navigationController else {
+            print("Navigation controller is nil.")
+            return
+        }
+
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning()
+        }
+
+        let transactionListVC = TransactionListViewController()
+        navigationController.pushViewController(transactionListVC, animated: true)
+    }
+
+    @objc func exportParticipantButtonTapped() {
         showActivityIndicator()
+
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning()
+        }
         Task {
             do {
                 let participantsData = try await self.fetchAllParticipants()
@@ -455,11 +539,43 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
             hideActivityIndicator()
         }
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+        }
+    }
+
+    @objc func exportTransactionButtonTapped() {
+        showActivityIndicator()
+
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning()
+        }
+        Task {
+            do {
+                let transactionsData = try await self.fetchAllTransactions()
+                let csvString = convertToCSV(transactionsData: transactionsData)
+                let csvURL = try saveCSVToFile(csvString: csvString)
+                shareCSVFile(csvURL: csvURL)
+            } catch {
+                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                    self.viewWillAppear(true)
+                }
+            }
+            hideActivityIndicator()
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
+            self.captureSession.startRunning()
+        }
     }
 
     private func fetchAllParticipants() async throws -> [Participant] {
         let querySnapshot = try await db.collection("Participants").order(by: "name").getDocuments()
-        return ParticipantUtil.parseToArrayParticipants(querySnapshot.documents)
+        return ParticipantUtil.parseToArray(querySnapshot.documents)
+    }
+
+    private func fetchAllTransactions() async throws -> [Transaction] {
+        let querySnapshot = try await db.collection("Transactions").order(by: "timestamp", descending: true).getDocuments()
+        return TransactionUtil.parseToArray(querySnapshot.documents)
     }
 
     private func convertToCSV(participantsData: [Participant]) -> String {
@@ -469,6 +585,31 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
         return csvString
     }
+
+    private func convertToCSV(transactionsData: [Transaction]) -> String {
+        var csvString = "Name,Date,Time,Type,ParticipantKit,Entry,Main Food,Snack\n"
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "d MMM yyyy"
+
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm:ss"
+
+        for data in transactionsData {
+            let date = dateFormatter.string(from: data.timestamp.dateValue())
+            let time = timeFormatter.string(from: data.timestamp.dateValue())
+
+            let participantKit = data.transactionDetails["participantKit"] ?? ""
+            let entry = data.transactionDetails["entry"] ?? ""
+            let mainFood = data.transactionDetails["mainFood"] ?? ""
+            let snack = data.transactionDetails["snack"] ?? ""
+
+            csvString.append("\(data.participantName),\(date),\(time),\(data.transactionType),\(participantKit),\(entry),\(mainFood),\(snack)\n")
+        }
+
+        return csvString
+    }
+
 
     private func saveCSVToFile(csvString: String) throws -> URL {
         let fileName = "participantsMODA.csv"
