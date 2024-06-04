@@ -43,13 +43,13 @@ enum TicketTypeEnum: Int {
     var backgroundColor: UIColor {
         switch self {
         case .participantKit:
-            return UIColor(red: 0.11, green: 0.72, blue: 0.53, alpha: 1.0) // Green
+            return UIColor(hex: "#1CB787")
         case .entry:
-            return UIColor(red: 0.19, green: 0.56, blue: 0.96, alpha: 1.0) // Blue
+            return UIColor(hex: "#308FF5")
         case .mainFood:
-            return UIColor(red: 0.90, green: 0.30, blue: 0.26, alpha: 1.0) // Red
+            return UIColor(hex: "#F43E69")
         case .snack:
-            return UIColor(red: 0.61, green: 0.35, blue: 0.71, alpha: 1.0) // Purple
+            return UIColor(hex: "#C969C9")
         }
     }
 }

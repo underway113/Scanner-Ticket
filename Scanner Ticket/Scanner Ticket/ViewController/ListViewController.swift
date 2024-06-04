@@ -71,6 +71,7 @@ class ListViewController: UIViewController {
 
     private func setupInfoView() {
         infoView.translatesAutoresizingMaskIntoConstraints = false
+        infoView.backgroundColor = .black
         view.addSubview(infoView)
 
         totalParticipantsLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -349,8 +350,8 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
     }
 
     private func getBackgroundColor(for displayValue: Bool) -> UIColor {
-        let darkerGreen = UIColor(red: 0.0, green: 0.5, blue: 0.0, alpha: 1.0)
-        let darkerRed = UIColor(red: 0.5, green: 0.0, blue: 0.0, alpha: 1.0)
+        let darkerGreen = UIColor(hex: "#12562A")
+        let darkerRed = UIColor(hex: "#720714")
         return displayValue ? darkerGreen : darkerRed
     }
 

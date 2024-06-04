@@ -17,6 +17,7 @@ class TransactionListViewController: UIViewController, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = "Transactions List"
+        navigationController?.navigationBar.backgroundColor = .black
         setupTableView()
         setupRefreshControl()
         fetchTransactions()
