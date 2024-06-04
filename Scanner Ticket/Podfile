@@ -10,6 +10,7 @@ target 'Scanner Ticket' do
   pod 'Firebase/Core'
   pod 'Firebase/Firestore'
 
+  pod 'DSF_QRCode', '~> 19.0.0'
   pod 'SwiftySound'
 end
 

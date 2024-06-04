@@ -12,6 +12,7 @@
 		CB17DD332C0EBF7800F77527 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */; };
 		CB17DD352C0EBF9500F77527 /* TransactionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD342C0EBF9500F77527 /* TransactionModel.swift */; };
 		CB17DD372C0EC63500F77527 /* TransactionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD362C0EC63500F77527 /* TransactionViewCell.swift */; };
+		CB2DFF3C2C0F02150060F2E5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2DFF3B2C0F02150060F2E5 /* UIColorExtension.swift */; };
 		CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */; };
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
 		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
@@ -40,6 +41,7 @@
 		CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListViewController.swift; sourceTree = "<group>"; };
 		CB17DD342C0EBF9500F77527 /* TransactionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionModel.swift; sourceTree = "<group>"; };
 		CB17DD362C0EC63500F77527 /* TransactionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewCell.swift; sourceTree = "<group>"; };
+		CB2DFF3B2C0F02150060F2E5 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
@@ -180,6 +182,7 @@
 			children = (
 				CBE392C72C0CD0F8003669C4 /* AlertManager.swift */,
 				CB17DD2E2C0DA31600F77527 /* StringExtension.swift */,
+				CB2DFF3B2C0F02150060F2E5 /* UIColorExtension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */,
 				CBF2067D2C0A16A20093F4CB /* ListViewController.swift in Sources */,
 				CBF206812C0A2A3A0093F4CB /* ParticipantModel.swift in Sources */,
+				CB2DFF3C2C0F02150060F2E5 /* UIColorExtension.swift in Sources */,
 				CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */,
 				CB17DD332C0EBF7800F77527 /* TransactionListViewController.swift in Sources */,
 				CB17DD312C0DAE8600F77527 /* Dummy.swift in Sources */,

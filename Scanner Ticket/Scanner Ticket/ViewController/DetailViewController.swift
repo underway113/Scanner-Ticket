@@ -7,6 +7,7 @@
 
 import FirebaseFirestore
 import UIKit
+import QRCode
 
 class DetailViewController: UIViewController {
     var documentID: String = ""
@@ -262,19 +263,30 @@ class DetailViewController: UIViewController {
             }
         }
     }
-
+    
     func generateQRCode(from string: String) -> UIImage? {
-        let data = string.data(using: String.Encoding.ascii)
-        if let QRFilter = CIFilter(name: "CIQRCodeGenerator") {
-            QRFilter.setValue(data, forKey: "inputMessage")
-            guard let QRImage = QRFilter.outputImage else {return nil}
+        do {
+            guard let imgLogo = UIImage(named: "ic-moda")?.cgImage else { return nil }
+            let blueColor = UIColor(hex: "#354A9F").cgColor
+            let redColor = UIColor(hex: "#D9232A").cgColor
+            let imageData = try QRCode.build
+                .logo(imgLogo, position: .squareCenter(inset: 2))
+                .text(string, textEncoding: .utf8)
+                .errorCorrection(.high)
+                .quietZonePixelCount(1)
+                .onPixels.style(blueColor)
+                .onPixels.shape(QRCode.PixelShape.RoundedPath())
+                .eye.style(blueColor)
+                .eye.shape(QRCode.EyeShape.Squircle())
+                .pupil.style(redColor)
+                .generate
+                .image(dimension: 600, representation: .png())
 
-            let transformScale = CGAffineTransform(scaleX: 12.0, y: 12.0)
-            let scaledQRImage = QRImage.transformed(by: transformScale)
-
-            return UIImage(ciImage: scaledQRImage)
+            return UIImage(data: imageData)
+        } catch {
+            print("Error generating QR code: \(error)")
+            return nil
         }
-        return nil
     }
 
     @objc private func shareQRCode() {

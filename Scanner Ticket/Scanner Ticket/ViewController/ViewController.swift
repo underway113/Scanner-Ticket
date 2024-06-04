@@ -55,6 +55,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .white
+        label.numberOfLines = 2
         label.font = UIFont.systemFont(ofSize: 20)
         label.textAlignment = .center
         return label
@@ -238,6 +239,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         bgView.addSubview(lastScanTitleLabel)
         bgView.addSubview(lastScanLabel)
         NSLayoutConstraint.activate([
+            lastScanLabel.leadingAnchor.constraint(equalTo: bgView.leadingAnchor, constant: 20),
+            lastScanLabel.trailingAnchor.constraint(equalTo: bgView.trailingAnchor, constant: -20),
             lastScanLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
             lastScanLabel.topAnchor.constraint(equalTo: scanTypeLabel.bottomAnchor, constant: 50),
             lastScanTitleLabel.centerXAnchor.constraint(equalTo: bgView.centerXAnchor),
