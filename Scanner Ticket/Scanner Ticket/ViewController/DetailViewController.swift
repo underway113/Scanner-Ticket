@@ -114,6 +114,8 @@ class DetailViewController: UIViewController {
             snackToggle.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
 
             qrImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            qrImageView.widthAnchor.constraint(equalToConstant: 250),
+            qrImageView.heightAnchor.constraint(equalToConstant: 250),
             qrImageView.topAnchor.constraint(equalTo: snackLabel.bottomAnchor, constant: 50),
 
             saveButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),

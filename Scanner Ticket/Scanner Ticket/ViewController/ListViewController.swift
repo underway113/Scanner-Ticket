@@ -123,8 +123,8 @@ class ListViewController: UIViewController {
         view.addSubview(emptyImageView)
 
         NSLayoutConstraint.activate([
-            emptyImageView.widthAnchor.constraint(equalToConstant: 100),
-            emptyImageView.heightAnchor.constraint(equalToConstant: 100),
+            emptyImageView.heightAnchor.constraint(equalToConstant: 86),
+            emptyImageView.widthAnchor.constraint(equalToConstant: 100), //86
             emptyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             emptyImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -20),
             emptyLabel.topAnchor.constraint(equalTo: emptyImageView.bottomAnchor, constant: 10),
