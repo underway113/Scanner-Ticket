@@ -170,7 +170,7 @@ class ListViewController: UIViewController {
                 self?.hideActivityIndicator()
                 guard let self = self else { return }
                 if let error = error {
-                    AlertManager.showErrorAlert(with: "Error fetching participants: \(error.localizedDescription)", completion: {})
+                    AlertManager.showErrorPopup(title: error.localizedDescription, message: "Error Fetching Participants", completion: {})
                     return
                 }
 
@@ -227,8 +227,8 @@ class ListViewController: UIViewController {
                         let exists = try await self.checkIfNameExists(name)
                         if exists {
                             self.hideActivityIndicator()
-                            AlertManager.showErrorAlert(with: "A participant with this name already exists.", completion: {})
-                        } 
+                            AlertManager.showErrorPopup(title: "A participant with this name already exists.", message: "", completion: {})
+                        }
                         else {
                             var newDocumentID: String
                             var isUnique: Bool
@@ -246,7 +246,7 @@ class ListViewController: UIViewController {
                     } 
                     catch {
                         self.hideActivityIndicator()
-                        AlertManager.showErrorAlert(with: "Error checking name: \(error.localizedDescription)", completion: {})
+                        AlertManager.showErrorPopup(title: error.localizedDescription, message: "Error Checking Name", completion: {})
                     }
                 }
             }

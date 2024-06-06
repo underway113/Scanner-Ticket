@@ -378,7 +378,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             let components = parseCode(code)
 
             guard let documentID = components.documentID, let name = components.name else {
-                AlertManager.showErrorAlert(with: "\(code)\nInvalid QR Code") {
+                AlertManager.showErrorPopup(title: "Invalid QR Code", message: code) {
                     self.viewWillAppear(true)
                 }
                 hideActivityIndicator()
@@ -388,7 +388,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             do {
                 let participant = try await fetchParticipant(documentID: documentID, name: name)
                 guard let participant = participant else {
-                    AlertManager.showErrorAlert(with: "\(code)\nParticipant Not Found") {
+                    AlertManager.showErrorPopup(title: "Participant Not Found", message: code) {
                         self.viewWillAppear(true)
                     }
                     hideActivityIndicator()
@@ -396,7 +396,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 }
 
                 if let fieldValue = getFieldStatus(participant: participant), fieldValue {
-                    AlertManager.showErrorAlert(with: "\(code)\nQR already Scanned!") {
+                    AlertManager.showErrorPopup(title: "QR Already Scanned", message: code) {
                         self.viewWillAppear(true)
                     }
                 } else {
@@ -407,7 +407,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                     }
                 }
             } catch {
-                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                AlertManager.showErrorPopup(title: error.localizedDescription, message: code) {
                     self.viewWillAppear(true)
                 }
             }
@@ -536,7 +536,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 let csvURL = try saveCSVToFile(csvString: csvString)
                 shareCSVFile(csvURL: csvURL)
             } catch {
-                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                AlertManager.showErrorPopup(title: error.localizedDescription, message: "") {
                     self.viewWillAppear(true)
                 }
             }
@@ -560,7 +560,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 let csvURL = try saveCSVToFile(csvString: csvString)
                 shareCSVFile(csvURL: csvURL)
             } catch {
-                AlertManager.showErrorAlert(with: "Error: \(error.localizedDescription)") {
+                AlertManager.showErrorPopup(title: error.localizedDescription, message: "") {
                     self.viewWillAppear(true)
                 }
             }
