@@ -193,25 +193,6 @@ class AlertManager {
         // Display the entry
         SwiftEntryKit.display(entry: contentView, using: attributes)
     }
-
-//    static func showSuccessAlert(with message: String, completion: @escaping () -> Void) {
-//        let alertController = UIAlertController(title: "Success", message: message, preferredStyle: .alert)
-//        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-//            completion()
-//        })
-//
-//        AudioServicesPlaySystemSound(1520)
-//        UIViewController.topViewController()?.present(alertController, animated: true, completion: nil)
-//    }
-
-    static func showErrorAlert(with message: String, completion: @escaping () -> Void) {
-        let alertController = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default) { _ in
-            completion()
-        })
-        AudioServicesPlaySystemSound(1521)
-        UIViewController.topViewController()?.present(alertController, animated: true, completion: nil)
-    }
 }
 
 extension UIViewController {
