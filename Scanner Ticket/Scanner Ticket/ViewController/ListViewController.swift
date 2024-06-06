@@ -117,7 +117,7 @@ class ListViewController: UIViewController {
         emptyLabel.text = "Data Not Found"
         emptyLabel.textAlignment = .center
         emptyLabel.translatesAutoresizingMaskIntoConstraints = false
-        emptyImageView.image = UIImage(named: "not-found")
+        emptyImageView.image = UIImage.tintedNotFoundImage(color: .white)
         emptyImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyLabel)
         view.addSubview(emptyImageView)

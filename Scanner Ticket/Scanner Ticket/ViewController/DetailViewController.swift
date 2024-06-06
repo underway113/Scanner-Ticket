@@ -65,7 +65,7 @@ class DetailViewController: UIViewController {
         configureToggle(mainFoodToggle, isOn: mainFood, action: #selector(toggleChanged))
         configureLabel(snackLabel, text: "Snack", fontSize: 18, bold: false)
         configureToggle(snackToggle, isOn: snack, action: #selector(toggleChanged))
-        configureImageView(qrImageView, image: "not-found")
+        configureImageView(qrImageView)
 
         // Configure save button
         saveButton.setTitle("SAVE", for: .normal)
@@ -142,10 +142,10 @@ class DetailViewController: UIViewController {
         view.addSubview(toggle)
     }
 
-    private func configureImageView(_ imageView: UIImageView, image: String) {
+    private func configureImageView(_ imageView: UIImageView) {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "not-found")
+        imageView.image = UIImage.tintedNotFoundImage(color: .white)
         view.addSubview(imageView)
     }
 
