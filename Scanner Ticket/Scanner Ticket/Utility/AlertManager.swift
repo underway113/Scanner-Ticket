@@ -36,12 +36,8 @@ class AlertManager {
         )
 
         // Image Configuration
-        let checkIcon = UIImage(systemName: "checkmark.circle.fill")
-        let tintedImage = checkIcon!.withRenderingMode(.alwaysOriginal)
-        let checkIconGreen = tintedImage.withTintColor(.systemGreen)
-
         let image = EKProperty.ImageContent(
-            image: checkIconGreen,
+            image: UIImage.tintedCheckmarkCircleFillImage(color: .systemGreen),
             size: CGSize(width: 100, height: 100),
             contentMode: .scaleAspectFit
         )
@@ -128,12 +124,8 @@ class AlertManager {
         )
 
         // Image Configuration
-        let xIcon = UIImage(systemName: "x.circle.fill")
-        let tintedImage = xIcon!.withRenderingMode(.alwaysOriginal)
-        let xIconRed = tintedImage.withTintColor(.systemRed)
-
         let image = EKProperty.ImageContent(
-            image: xIconRed,
+            image: UIImage.tintedXCircleFillImage(color: .systemRed),
             size: CGSize(width: 100, height: 100),
             contentMode: .scaleAspectFit
         )

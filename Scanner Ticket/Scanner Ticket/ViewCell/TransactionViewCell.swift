@@ -81,12 +81,13 @@ class TransactionViewCell: UITableViewCell {
         iconImageView.image = transaction.transactionType == "add" ? UIImage(systemName: "plus.circle") : UIImage(systemName: "pencil.circle")
 
         let attributedString = NSMutableAttributedString()
+        
         for (key, value) in transaction.transactionDetails {
             let text = NSAttributedString(string: "\(key): ")
             attributedString.append(text)
 
             let imageAttachment = NSTextAttachment()
-            imageAttachment.image = (value as! Int) == 1 ? UIImage(named: "check-white") : UIImage(named: "cross-white")
+            imageAttachment.image = (value as! Int) == 1 ? UIImage.tintedCheckmarkSquareFillImage(color: .white) : UIImage.tintedXSquareImage(color: .white)
             imageAttachment.bounds = CGRect(x: 0, y: -3, width: 14, height: 14)
             let imageString = NSAttributedString(attachment: imageAttachment)
             attributedString.append(imageString)

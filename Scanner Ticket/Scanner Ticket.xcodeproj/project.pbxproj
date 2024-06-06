@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CB0437A92C1179DE00E39CA7 /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0437A82C1179DE00E39CA7 /* UIImageExtension.swift */; };
 		CB17DD2F2C0DA31600F77527 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD2E2C0DA31600F77527 /* StringExtension.swift */; };
 		CB17DD312C0DAE8600F77527 /* Dummy.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD302C0DAE8600F77527 /* Dummy.swift */; };
 		CB17DD332C0EBF7800F77527 /* TransactionListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */; };
@@ -36,6 +37,7 @@
 		479D0EEDAF1A103AD4F81285 /* Pods_Scanner_Ticket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Scanner_Ticket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A51E6F2385F1786FD73691C /* Pods-Scanner Ticket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.release.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.release.xcconfig"; sourceTree = "<group>"; };
 		CA4E90D8B0E0B33F01BAAA52 /* Pods-Scanner Ticket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Scanner Ticket.debug.xcconfig"; path = "Target Support Files/Pods-Scanner Ticket/Pods-Scanner Ticket.debug.xcconfig"; sourceTree = "<group>"; };
+		CB0437A82C1179DE00E39CA7 /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		CB17DD2E2C0DA31600F77527 /* StringExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		CB17DD302C0DAE8600F77527 /* Dummy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dummy.swift; sourceTree = "<group>"; };
 		CB17DD322C0EBF7800F77527 /* TransactionListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionListViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				CBE392C72C0CD0F8003669C4 /* AlertManager.swift */,
 				CB17DD2E2C0DA31600F77527 /* StringExtension.swift */,
 				CB2DFF3B2C0F02150060F2E5 /* UIColorExtension.swift */,
+				CB0437A82C1179DE00E39CA7 /* UIImageExtension.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 			files = (
 				CBE392C52C0CC054003669C4 /* DetailViewController.swift in Sources */,
 				CB17DD372C0EC63500F77527 /* TransactionViewCell.swift in Sources */,
+				CB0437A92C1179DE00E39CA7 /* UIImageExtension.swift in Sources */,
 				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
 				CBE392C82C0CD0F8003669C4 /* AlertManager.swift in Sources */,

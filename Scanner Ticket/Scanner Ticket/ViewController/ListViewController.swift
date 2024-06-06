@@ -146,9 +146,8 @@ class ListViewController: UIViewController {
     }
 
     private func setupFilterButton() {
-        let btnImage = UIImage(named: "filter-all")
         filterButton.tintColor = .white
-        filterButton.setImage(btnImage , for: .normal)
+        filterButton.setImage(UIImage.tintedFilterImage(color: .white) , for: .normal)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(filterButton)
@@ -295,16 +294,13 @@ class ListViewController: UIViewController {
     private func applyFilter() {
         switch filterMode {
         case .all:
-            let btnImage = UIImage(named: "filter-all")
-            filterButton.setImage(btnImage , for: .normal)
+            filterButton.setImage(UIImage.tintedFilterImage(color: .white) , for: .normal)
             filteredParticipants = participants
         case .trueOnly:
-            let btnImage = UIImage(named: "check-white")
-            filterButton.setImage(btnImage , for: .normal)
+            filterButton.setImage(UIImage.tintedCheckmarkSquareFillImage(color: .white), for: .normal)
             filteredParticipants = participants.filter { getDisplayValue(for: $0) }
         case .falseOnly:
-            let btnImage = UIImage(named: "cross-white")
-            filterButton.setImage(btnImage , for: .normal)
+            filterButton.setImage(UIImage.tintedXSquareImage(color: .white) , for: .normal)
             filteredParticipants = participants.filter { !getDisplayValue(for: $0) }
         }
         updateEmptyViewVisibility()
