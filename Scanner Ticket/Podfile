@@ -12,6 +12,7 @@ target 'Scanner Ticket' do
 
   pod 'DSF_QRCode', '~> 19.0.0'
   pod 'SwiftySound'
+  pod 'SwiftEntryKit', '2.0.0'
 end
 
 post_install do |installer|

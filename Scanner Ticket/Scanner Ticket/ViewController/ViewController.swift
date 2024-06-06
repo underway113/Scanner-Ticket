@@ -402,7 +402,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 } else {
                     try await updateField(documentID: documentID, name: name)
                     playSuccessSound()
-                    AlertManager.showSuccessAlert(with: "\(code)\nSuccess Scanned") {
+                    AlertManager.showSuccessPopup(message: code) {
                         self.viewWillAppear(true)
                     }
                 }
