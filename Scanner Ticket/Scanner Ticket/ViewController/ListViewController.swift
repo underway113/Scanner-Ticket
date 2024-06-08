@@ -242,7 +242,7 @@ class ListViewController: UIViewController {
                             detailVC.isNewParticipant = true
                             self.navigationController?.pushViewController(detailVC, animated: true)
                         }
-                    } 
+                    }
                     catch {
                         self.hideActivityIndicator()
                         AlertManager.showErrorPopup(title: error.localizedDescription, message: "Error Checking Name", completion: {})
@@ -307,7 +307,7 @@ class ListViewController: UIViewController {
     }
 }
 
-extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredParticipants.count
     }
@@ -370,6 +370,87 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate, UISear
         navigationController?.pushViewController(detailVC, animated: true)
     }
 
+    // Swipe right to do Scan function
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let scanAction = UIContextualAction(style: .destructive, title: "Scan") { [weak self] (action, view, completionHandler) in
+            guard let self = self else { return }
+            let participant = self.getSortedFilteredParticipant(at: indexPath.row)
+
+            Task {
+                do {
+                    try await self.updateField(documentID: participant.documentID, name: participant.name, value: true)
+                    AudioServicesPlaySystemSound(1520)
+                    self.fetchParticipants()
+                    completionHandler(true)
+                } catch {
+                    AudioServicesPlaySystemSound(1521)
+                    print("Error updating field: \(error)")
+                    completionHandler(false)
+                }
+            }
+        }
+        scanAction.backgroundColor = .systemBlue
+
+        let configuration = UISwipeActionsConfiguration(actions: [scanAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
+
+    // Swipe left to do Unscan function
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let unscanAction = UIContextualAction(style: .destructive, title: "Unscan") { [weak self] (action, view, completionHandler) in
+            guard let self = self else { return }
+            let participant = self.getSortedFilteredParticipant(at: indexPath.row)
+
+            Task {
+                do {
+                    try await self.updateField(documentID: participant.documentID, name: participant.name, value: false)
+                    AudioServicesPlaySystemSound(1520)
+                    self.fetchParticipants()
+                    completionHandler(true)
+
+                } catch {
+                    AudioServicesPlaySystemSound(1521)
+                    print("Error updating field: \(error)")
+                    completionHandler(false)
+                }
+            }
+        }
+        unscanAction.backgroundColor = .systemRed
+
+        let configuration = UISwipeActionsConfiguration(actions: [unscanAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
+
+    private func updateField(documentID: String, name: String, value: Bool) async throws {
+        guard let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex) else {
+            return
+        }
+        let fieldName = ticketType.description
+        let docRef = db.collection("Participants").document(documentID)
+        try await docRef.updateData([fieldName: value])
+        addTransaction(
+            transaction: Transaction(
+                transactionType: "update",
+                participantName: name,
+                transactionDetails: [fieldName: value]
+            )
+        )
+    }
+
+    private func addTransaction(transaction: Transaction) {
+        db.collection("Transactions").addDocument(data: transaction.toDictionary()) { err in
+            if let err = err {
+                print("Error adding transaction: \(err)")
+            } else {
+                print("Transaction successfully added!")
+            }
+        }
+    }
+}
+
+extension ListViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         filteredParticipants = searchText.isEmpty ? participants : filterParticipants(by: searchText)
         filterButton.setTitle("ALL", for: .normal)
