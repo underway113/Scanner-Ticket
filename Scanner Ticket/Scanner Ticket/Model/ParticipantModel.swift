@@ -23,8 +23,6 @@ struct Participant: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(documentID)
     }
-
-
 }
 
 class ParticipantUtil {

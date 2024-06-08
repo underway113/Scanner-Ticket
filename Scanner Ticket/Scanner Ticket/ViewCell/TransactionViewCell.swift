@@ -87,6 +87,10 @@ class TransactionViewCell: UITableViewCell {
             tintColor = .systemBlue
             image = UIImage(systemName: "pencil.circle")
         }
+        else if transaction.transactionType == "swipe" {
+            tintColor = .systemBlue
+            image = UIImage(systemName: "hand.draw")
+        }
 
         iconImageView.tintColor = tintColor
         iconImageView.image = image

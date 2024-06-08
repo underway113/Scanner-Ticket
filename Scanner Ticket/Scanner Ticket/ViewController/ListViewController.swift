@@ -372,10 +372,10 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Swipe right to do Scan function
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let participant = self.getSortedFilteredParticipant(at: indexPath.row)
+        guard getDisplayValue(for: participant) == false else { return nil }
         let scanAction = UIContextualAction(style: .destructive, title: "Scan") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
-            let participant = self.getSortedFilteredParticipant(at: indexPath.row)
-
             Task {
                 do {
                     try await self.updateField(documentID: participant.documentID, name: participant.name, value: true)
@@ -398,10 +398,10 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
 
     // Swipe left to do Unscan function
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let participant = self.getSortedFilteredParticipant(at: indexPath.row)
+        guard getDisplayValue(for: participant) == true else { return nil }
         let unscanAction = UIContextualAction(style: .destructive, title: "Unscan") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
-            let participant = self.getSortedFilteredParticipant(at: indexPath.row)
-
             Task {
                 do {
                     try await self.updateField(documentID: participant.documentID, name: participant.name, value: false)
@@ -432,7 +432,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         try await docRef.updateData([fieldName: value])
         addTransaction(
             transaction: Transaction(
-                transactionType: "update",
+                transactionType: "swipe",
                 participantName: name,
                 transactionDetails: [fieldName: value]
             )
