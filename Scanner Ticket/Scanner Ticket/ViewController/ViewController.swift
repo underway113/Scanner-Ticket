@@ -113,7 +113,6 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         return button
     }()
 
-
     let versionLabel: UILabel = {
         let label = UILabel()
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -125,6 +124,25 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         label.textColor = .white
         label.font = UIFont.systemFont(ofSize: 10, weight: .thin)
         return label
+    }()
+
+    let flashLightContainerView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .white.withAlphaComponent(0)
+        view.layer.cornerRadius = 25
+        view.clipsToBounds = true
+        return view
+    }()
+
+    // Flashlight button as an UIImageView
+    let flashLightImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(systemName: "bolt.slash.circle")
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFit
+        return imageView
     }()
 
     override func viewDidLoad() {
@@ -141,6 +159,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         setupVersionLabel()
         setupTransactionsListButton()
         setupExportTransactionButton()
+        setupFlashLightButton()
         updateView()
     }
 
@@ -301,6 +320,32 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         ])
     }
 
+    private func setupFlashLightButton() {
+        view.addSubview(flashLightContainerView)
+
+        NSLayoutConstraint.activate([
+            flashLightContainerView.centerXAnchor.constraint(equalTo: bgView.centerXAnchor, constant: 115),
+            flashLightContainerView.bottomAnchor.constraint(equalTo: scanTypeLabel.topAnchor, constant: -55),
+            flashLightContainerView.widthAnchor.constraint(equalToConstant: 50),
+            flashLightContainerView.heightAnchor.constraint(equalToConstant: 50)
+        ])
+
+        // Add the image view to the container view
+        flashLightContainerView.addSubview(flashLightImageView)
+        NSLayoutConstraint.activate([
+            flashLightImageView.topAnchor.constraint(equalTo: flashLightContainerView.topAnchor, constant: 5),
+            flashLightImageView.bottomAnchor.constraint(equalTo: flashLightContainerView.bottomAnchor, constant: -5),
+            flashLightImageView.leadingAnchor.constraint(equalTo: flashLightContainerView.leadingAnchor, constant: 5),
+            flashLightImageView.trailingAnchor.constraint(equalTo: flashLightContainerView.trailingAnchor, constant: -5)
+        ])
+
+        // Add tap gesture recognizer to handle tap on the flashlight button
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleFlashlight))
+        flashLightContainerView.isUserInteractionEnabled = true
+        flashLightContainerView.addGestureRecognizer(tapGesture)
+    }
+
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         previewLayer.position = CGPoint(x: bgView.frame.midX, y: bgView.frame.midY)
@@ -342,6 +387,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         navigationController?.setNavigationBarHidden(true, animated: animated)
 
         if (captureSession?.isRunning == false) {
+            self.flashLightImageView.image = UIImage(systemName: "bolt.slash.circle")
             DispatchQueue.global(qos: .userInitiated).async {
                 self.captureSession.startRunning()
             }
@@ -521,6 +567,27 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
         let transactionListVC = TransactionListViewController()
         navigationController.pushViewController(transactionListVC, animated: true)
+    }
+
+    @objc private func toggleFlashlight() {
+        guard let device = AVCaptureDevice.default(for: .video) else { return }
+        if device.hasTorch {
+            do {
+                try device.lockForConfiguration()
+                if device.torchMode == .on {
+                    device.torchMode = .off
+                    flashLightImageView.image = UIImage(systemName: "bolt.slash.circle")
+                } else {
+                    try device.setTorchModeOn(level: AVCaptureDevice.maxAvailableTorchLevel)
+                    flashLightImageView.image = UIImage(systemName: "bolt.circle.fill")
+                }
+                device.unlockForConfiguration()
+            } catch {
+                print("Torch could not be used")
+            }
+        } else {
+            print("Torch is not available")
+        }
     }
 
     @objc func exportParticipantButtonTapped() {
