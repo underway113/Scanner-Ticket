@@ -8,11 +8,12 @@
 import UIKit
 import FirebaseFirestore
 
-class TransactionListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TransactionListViewController: UIViewController {
 
     var transactions: [Transaction] = []
     var tableView: UITableView!
     var refreshControl: UIRefreshControl!
+    var activityIndicator = UIActivityIndicatorView(style: .large)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +21,7 @@ class TransactionListViewController: UIViewController, UITableViewDelegate, UITa
         navigationController?.navigationBar.backgroundColor = .black
         setupTableView()
         setupRefreshControl()
+        setupActivityIndicator()
         fetchTransactions()
     }
 
@@ -37,14 +39,26 @@ class TransactionListViewController: UIViewController, UITableViewDelegate, UITa
         tableView.addSubview(refreshControl)
     }
 
+    private func setupActivityIndicator() {
+        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicator)
+
+        NSLayoutConstraint.activate([
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
+
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         fetchTransactions()
     }
 
     func fetchTransactions() {
+        showActivityIndicator()
         let db = Firestore.firestore()
         db.collection("Transactions").order(by: "timestamp", descending: true).getDocuments { (querySnapshot, error) in
             self.refreshControl.endRefreshing() // Stop the refresh control animation
+            self.hideActivityIndicator()
 
             if let error = error {
                 print("Error getting transactions: \(error)")
@@ -61,6 +75,16 @@ class TransactionListViewController: UIViewController, UITableViewDelegate, UITa
         }
     }
 
+    private func showActivityIndicator() {
+        activityIndicator.startAnimating()
+    }
+
+    private func hideActivityIndicator() {
+        activityIndicator.stopAnimating()
+    }
+}
+
+extension TransactionListViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return transactions.count
     }
