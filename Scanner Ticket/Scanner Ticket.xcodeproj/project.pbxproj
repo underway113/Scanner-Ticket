@@ -474,8 +474,8 @@
 				DEVELOPMENT_TEAM = 4PP2KBX472;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Scanner Ticket/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "eTicket Scanner";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_CFBundleDisplayName = "FamDay Scanner";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera Please";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -510,8 +510,8 @@
 				GCC_OPTIMIZATION_LEVEL = s;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Scanner Ticket/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "eTicket Scanner";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
+				INFOPLIST_KEY_CFBundleDisplayName = "FamDay Scanner";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Use Camera Please";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
