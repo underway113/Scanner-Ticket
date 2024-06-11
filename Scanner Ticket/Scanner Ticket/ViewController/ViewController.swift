@@ -421,9 +421,8 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         showLastScanLabel(code: code)
         Task {
             showActivityIndicator()
-            let components = parseCode(code)
 
-            guard let documentID = components.documentID, let name = components.name else {
+            guard code.count == 5 && String.isInCharacterSelection(code: code) else {
                 AlertManager.showErrorPopup(title: "Invalid QR Code", message: code) {
                     self.viewWillAppear(true)
                 }
@@ -432,7 +431,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             }
 
             do {
-                let participant = try await fetchParticipant(documentID: documentID, name: name)
+                let participant = try await fetchParticipant(documentID: code)
                 guard let participant = participant else {
                     AlertManager.showErrorPopup(title: "Participant Not Found", message: code) {
                         self.viewWillAppear(true)
@@ -441,18 +440,21 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                     return
                 }
 
+                let name = participant["name"] as? String ?? ""
                 if let fieldValue = getFieldStatus(participant: participant), fieldValue {
-                    AlertManager.showErrorPopup(title: "QR Already Scanned", message: code) {
+                    AlertManager.showErrorPopup(title: name, message: "QR Already Scanned") {
                         self.viewWillAppear(true)
                     }
-                } else {
-                    try await updateField(documentID: documentID, name: name)
+                } 
+                else {
+                    try await updateField(documentID: code, name: name)
                     playSuccessSound()
-                    AlertManager.showSuccessPopup(message: code) {
+                    AlertManager.showSuccessPopup(message: name) {
                         self.viewWillAppear(true)
                     }
                 }
-            } catch {
+            } 
+            catch {
                 AlertManager.showErrorPopup(title: error.localizedDescription, message: code) {
                     self.viewWillAppear(true)
                 }
@@ -461,18 +463,11 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
 
-    private func parseCode(_ code: String) -> (documentID: String?, name: String?) {
-        let components = code.components(separatedBy: "_")
-        guard components.count == 2 else {
-            return (nil, nil)
-        }
-        return (components[0], components[1])
-    }
 
-    private func fetchParticipant(documentID: String, name: String) async throws -> [String: Any]? {
+    private func fetchParticipant(documentID: String) async throws -> [String: Any]? {
         let docRef = db.collection("Participants").document(documentID)
         let document = try await docRef.getDocument()
-        guard document.exists, let data = document.data(), let participantName = data["name"] as? String, participantName == name else {
+        guard document.exists, let data = document.data() else {
             return nil
         }
         return data

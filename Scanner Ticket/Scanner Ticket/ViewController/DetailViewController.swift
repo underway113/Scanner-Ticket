@@ -165,7 +165,7 @@ class DetailViewController: UIViewController {
         mainFoodToggle.isOn = mainFood
         snackToggle.isOn = snack
 
-        let QRimage = generateQRCode(from: "\(documentID)_\(name)")
+        let QRimage = generateQRCode(from: documentID)
         qrImageView.image = QRimage
     }
 
