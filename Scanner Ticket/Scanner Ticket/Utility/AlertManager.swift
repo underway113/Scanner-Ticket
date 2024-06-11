@@ -185,6 +185,92 @@ class AlertManager {
         // Display the entry
         SwiftEntryKit.display(entry: contentView, using: attributes)
     }
+
+    static func showPopupMessage(
+        title: String,
+        titleColor: EKColor,
+        description: String,
+        descriptionColor: EKColor,
+        buttonTitleColor: EKColor,
+        buttonBackgroundColor: EKColor,
+        backgroundColor: EKColor,
+        okCompletion: @escaping () -> Void,
+        cancelCompletion: @escaping () -> Void
+    ) {
+        var bottomAlertAttributes: EKAttributes {
+            var attributes = EKAttributes.bottomFloat
+            attributes.hapticFeedbackType = .success
+            attributes.displayDuration = .infinity
+            attributes.screenBackground = .color(color: .black.with(alpha: 0.5))
+            attributes.shadow = .active(
+                with: .init(
+                    color: .black,
+                    opacity: 0.3,
+                    radius: 8
+                )
+            )
+            attributes.screenInteraction = .dismiss
+            attributes.screenInteraction.customTapActions.append(cancelCompletion)
+            attributes.entryInteraction = .absorbTouches
+            attributes.scroll = .disabled
+            attributes.roundCorners = .top(radius: 20)
+            attributes.entryBackground = .color(color: backgroundColor)
+            attributes.entranceAnimation = .init(
+                translate: .init(
+                    duration: 0.5,
+                    spring: .init(damping: 1, initialVelocity: 0)
+                )
+            )
+            attributes.exitAnimation = .init(
+                translate: .init(duration: 0.2)
+            )
+            attributes.popBehavior = .animated(
+                animation: .init(
+                    translate: .init(duration: 0.2)
+                )
+            )
+            attributes.positionConstraints = .fullWidth
+            attributes.positionConstraints.safeArea = .empty(fillSafeArea: true)
+            return attributes
+        }
+
+        let title = EKProperty.LabelContent(
+            text: title,
+            style: .init(
+                font: UIFont.systemFont(ofSize: 24, weight: .medium),
+                color: titleColor,
+                alignment: .center
+            )
+        )
+        let description = EKProperty.LabelContent(
+            text: description,
+            style: .init(
+                font:  UIFont.systemFont(ofSize: 16, weight: .medium),
+                color: descriptionColor,
+                alignment: .center
+            )
+        )
+        let button = EKProperty.ButtonContent(
+            label: .init(
+                text: "Check-In",
+                style: .init(
+                    font: UIFont.systemFont(ofSize: 16, weight: .bold),
+                    color: buttonTitleColor
+                )
+            ),
+            backgroundColor: buttonBackgroundColor,
+            highlightedBackgroundColor: buttonTitleColor.with(alpha: 0.05)
+        )
+        let message = EKPopUpMessage(
+            title: title,
+            description: description,
+            button: button) {
+                SwiftEntryKit.dismiss()
+                okCompletion()
+            }
+        let contentView = EKPopUpMessageView(with: message)
+        SwiftEntryKit.display(entry: contentView, using: bottomAlertAttributes)
+    }
 }
 
 extension UIViewController {

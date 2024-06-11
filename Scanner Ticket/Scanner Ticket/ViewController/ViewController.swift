@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 import FirebaseFirestore
 import SwiftySound
+import SwiftEntryKit
 
 class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     var currentURLIndex = 0
@@ -384,12 +385,15 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: animated)
 
-        if (captureSession?.isRunning == false) {
-            self.flashLightImageView.image = UIImage(systemName: "bolt.slash.circle")
-            DispatchQueue.global(qos: .userInitiated).async {
-                self.captureSession.startRunning()
+        if isTopViewController() {
+            navigationController?.setNavigationBarHidden(true, animated: animated)
+
+            if (captureSession?.isRunning == false) {
+                self.flashLightImageView.image = UIImage(systemName: "bolt.slash.circle")
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.captureSession.startRunning()
+                }
             }
         }
     }
@@ -447,11 +451,37 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                     }
                 } 
                 else {
-                    try await updateField(documentID: code, name: name)
-                    playSuccessSound()
-                    AlertManager.showSuccessPopup(message: name) {
-                        self.viewWillAppear(true)
-                    }
+                    AlertManager.showPopupMessage(
+                        title: name,
+                        titleColor: .black,
+                        description: "Participant will check in on \n\(scanTypeLabel.text ?? "")",
+                        descriptionColor: .black,
+                        buttonTitleColor: .white,
+                        buttonBackgroundColor: EKColor(bgView.backgroundColor ?? .systemGreen),
+                        backgroundColor: .white,
+                        okCompletion: {
+                            Task {
+                                self.showActivityIndicator()
+                                do {
+                                    try await self.updateField(documentID: code, name: name)
+                                    self.playSuccessSound()
+                                    AlertManager.showSuccessPopup(message: name) {
+                                        self.viewWillAppear(true)
+                                    }
+                                } 
+                                catch {
+                                    AlertManager.showErrorPopup(title: error.localizedDescription, message: code) {
+                                        self.viewWillAppear(true)
+                                    }
+                                }
+
+                                self.hideActivityIndicator()
+                            }
+                        },
+                        cancelCompletion: {
+                            self.viewWillAppear(true)
+                        }
+                    )
                 }
             } 
             catch {

@@ -17,6 +17,8 @@
 		CB42B5F82C0A098C00957A87 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */; };
 		CB51A17C2C09B18300D1C3F2 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = CB51A17B2C09B18300D1C3F2 /* .gitignore */; };
 		CB51A17E2C09B2C600D1C3F2 /* URLs.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB51A17D2C09B2C600D1C3F2 /* URLs.swift */; };
+		CB8E85232C1846450080EA95 /* UIScreenExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8E85222C1846450080EA95 /* UIScreenExtension.swift */; };
+		CB8E85252C1858AC0080EA95 /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB8E85242C1858AC0080EA95 /* UIViewController.swift */; };
 		CBCA83762C097DC4006F178E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83752C097DC4006F178E /* AppDelegate.swift */; };
 		CBCA83782C097DC4006F178E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83772C097DC4006F178E /* SceneDelegate.swift */; };
 		CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBCA83792C097DC4006F178E /* ViewController.swift */; };
@@ -47,6 +49,8 @@
 		CB42B5F72C0A098C00957A87 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CB51A17B2C09B18300D1C3F2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		CB51A17D2C09B2C600D1C3F2 /* URLs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLs.swift; sourceTree = "<group>"; };
+		CB8E85222C1846450080EA95 /* UIScreenExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIScreenExtension.swift; sourceTree = "<group>"; };
+		CB8E85242C1858AC0080EA95 /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		CBCA83722C097DC4006F178E /* Scanner Ticket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Scanner Ticket.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CBCA83752C097DC4006F178E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CBCA83772C097DC4006F178E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 				CB17DD2E2C0DA31600F77527 /* StringExtension.swift */,
 				CB2DFF3B2C0F02150060F2E5 /* UIColorExtension.swift */,
 				CB0437A82C1179DE00E39CA7 /* UIImageExtension.swift */,
+				CB8E85222C1846450080EA95 /* UIScreenExtension.swift */,
+				CB8E85242C1858AC0080EA95 /* UIViewController.swift */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -309,7 +315,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CBE392C52C0CC054003669C4 /* DetailViewController.swift in Sources */,
+				CB8E85232C1846450080EA95 /* UIScreenExtension.swift in Sources */,
 				CB17DD372C0EC63500F77527 /* TransactionViewCell.swift in Sources */,
+				CB8E85252C1858AC0080EA95 /* UIViewController.swift in Sources */,
 				CB0437A92C1179DE00E39CA7 /* UIImageExtension.swift in Sources */,
 				CBF2067F2C0A253C0093F4CB /* TicketTypeEnum.swift in Sources */,
 				CBCA837A2C097DC4006F178E /* ViewController.swift in Sources */,
