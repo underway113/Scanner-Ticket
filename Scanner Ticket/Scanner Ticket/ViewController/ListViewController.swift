@@ -319,7 +319,6 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
 
         let participant = getSortedFilteredParticipant(at: indexPath.row)
         let displayValue = getDisplayValue(for: participant)
-
         cell.configure(id: participant.documentID, name: participant.name, value: displayValue)
         cell.backgroundColor = getBackgroundColor(for: displayValue)
 

@@ -93,6 +93,7 @@ extension TransactionListViewController : UITableViewDelegate, UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: "TransactionViewCell", for: indexPath) as! TransactionViewCell
         let transaction = transactions[indexPath.row]
         cell.configure(with: transaction)
+        cell.selectionStyle = .none
         return cell
     }
 }
