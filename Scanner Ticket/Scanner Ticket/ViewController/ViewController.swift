@@ -95,9 +95,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(btnImage , for: .normal)
         button.backgroundColor = .white
-        button.tintColor = .black
+        button.tintColor = UIColor(hex: "#17233F")
         button.layer.cornerRadius = 10
-        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        button.imageEdgeInsets = UIEdgeInsets(top: 9, left: 13, bottom: 9, right: 13)
         return button
     }()
 
@@ -107,9 +107,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(btnImage , for: .normal)
         button.backgroundColor = .white
-        button.tintColor = .black
+        button.tintColor = UIColor(hex: "#17233F")
         button.layer.cornerRadius = 10
-        button.imageEdgeInsets = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
+        button.imageEdgeInsets = UIEdgeInsets(top: 9, left: 13, bottom: 9, right: 13)
         return button
     }()
 
