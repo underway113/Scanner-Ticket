@@ -427,72 +427,71 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
             showActivityIndicator()
 
             guard code.count == 5 && String.isInCharacterSelection(code: code) else {
-                AlertManager.showErrorPopup(title: "Invalid QR Code", message: code) {
-                    self.viewWillAppear(true)
-                }
-                hideActivityIndicator()
+                showAlert(title: "Invalid QR Code", message: code)
                 return
             }
 
             do {
-                let participant = try await fetchParticipant(documentID: code)
-                guard let participant = participant else {
-                    AlertManager.showErrorPopup(title: "Participant Not Found", message: code) {
-                        self.viewWillAppear(true)
-                    }
-                    hideActivityIndicator()
-                    return
+                if let participant = try await fetchParticipant(documentID: code) {
+                    showLastScanLabel(code: "\(code) - \(participant["name"] as? String ?? "")")
+                    handleParticipant(participant, with: code)
+                } else {
+                    showAlert(title: "Participant Not Found", message: code)
                 }
-
-                let name = participant["name"] as? String ?? ""
-                if let fieldValue = getFieldStatus(participant: participant), fieldValue {
-                    AlertManager.showErrorPopup(title: name, message: "QR Already Scanned") {
-                        self.viewWillAppear(true)
-                    }
-                } 
-                else {
-                    AlertManager.showPopupMessage(
-                        title: name,
-                        titleColor: .black,
-                        description: "Participant will check in on \n\(scanTypeLabel.text ?? "")",
-                        descriptionColor: .black,
-                        buttonTitleColor: .white,
-                        buttonBackgroundColor: EKColor(bgView.backgroundColor ?? .systemGreen),
-                        backgroundColor: .white,
-                        okCompletion: {
-                            Task {
-                                self.showActivityIndicator()
-                                do {
-                                    try await self.updateField(documentID: code, name: name)
-                                    self.playSuccessSound()
-                                    AlertManager.showSuccessPopup(message: name) {
-                                        self.viewWillAppear(true)
-                                    }
-                                } 
-                                catch {
-                                    AlertManager.showErrorPopup(title: error.localizedDescription, message: code) {
-                                        self.viewWillAppear(true)
-                                    }
-                                }
-
-                                self.hideActivityIndicator()
-                            }
-                        },
-                        cancelCompletion: {
-                            self.viewWillAppear(true)
-                        }
-                    )
-                }
-            } 
-            catch {
-                AlertManager.showErrorPopup(title: error.localizedDescription, message: code) {
-                    self.viewWillAppear(true)
-                }
+            } catch {
+                showAlert(title: error.localizedDescription, message: code)
             }
+
             hideActivityIndicator()
         }
     }
 
+    private func handleParticipant(_ participant: [String: Any], with code: String) {
+        let name = participant["name"] as? String ?? ""
+
+        if getFieldStatus(participant: participant) == true {
+            showAlert(title: name, message: "QR Already Scanned")
+        } else {
+            showPopup(participant: participant, with: code, name: name)
+        }
+    }
+
+    private func showPopup(participant: [String: Any], with code: String, name: String) {
+        AlertManager.showPopupMessage(
+            title: name,
+            titleColor: .black,
+            description: "Participant will check-in on \n\(scanTypeLabel.text ?? "")",
+            descriptionColor: .black,
+            buttonTitleColor: .white,
+            buttonBackgroundColor: EKColor(bgView.backgroundColor ?? .systemGreen),
+            backgroundColor: .white,
+            okCompletion: {
+                Task {
+                    self.showActivityIndicator()
+                    do {
+                        try await self.updateField(documentID: code, name: name)
+                        self.playSuccessSound()
+                        AlertManager.showSuccessPopup(message: name) {
+                            self.viewWillAppear(true)
+                        }
+                    } catch {
+                        self.showAlert(title: error.localizedDescription, message: code)
+                    }
+                    self.hideActivityIndicator()
+                }
+            },
+            cancelCompletion: {
+                self.viewWillAppear(true)
+            }
+        )
+    }
+
+    private func showAlert(title: String, message: String) {
+        AlertManager.showErrorPopup(title: title, message: message) {
+            self.viewWillAppear(true)
+        }
+        hideActivityIndicator()
+    }
 
     private func fetchParticipant(documentID: String) async throws -> [String: Any]? {
         let docRef = db.collection("Participants").document(documentID)
