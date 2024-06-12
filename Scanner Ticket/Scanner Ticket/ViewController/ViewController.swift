@@ -447,20 +447,22 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     }
 
     private func handleParticipant(_ participant: [String: Any], with code: String) {
-        let name = participant["name"] as? String ?? ""
-
         if getFieldStatus(participant: participant) == true {
+            let name = participant["name"] as? String ?? ""
             showAlert(title: name, message: "QR Already Scanned")
         } else {
-            showPopup(participant: participant, with: code, name: name)
+            showPopup(participant: participant, with: code)
         }
     }
 
-    private func showPopup(participant: [String: Any], with code: String, name: String) {
+    private func showPopup(participant: [String: Any], with code: String) {
+        let name = participant["name"] as? String ?? ""
+        let ticketType = TicketTypeEnum(rawValue: self.currentURLIndex)?.title.uppercased() ?? ""
+
         AlertManager.showPopupMessage(
             title: name,
             titleColor: .black,
-            description: "Participant will check-in on \n\(scanTypeLabel.text ?? "")",
+            description: "will be checked-in on \n\(ticketType)",
             descriptionColor: .black,
             buttonTitleColor: .white,
             buttonBackgroundColor: EKColor(bgView.backgroundColor ?? .systemGreen),
@@ -473,6 +475,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         self.playSuccessSound()
                         AlertManager.showSuccessPopup(message: name) {
                             self.viewWillAppear(true)
+                            if let phone = participant["phone"] as? String {
+                                self.openWhatsApp(phoneNumber: phone, message: "You have successfully checked-in \(ticketType.uppercased()). Thank you")
+                            }
                         }
                     } catch {
                         self.showAlert(title: error.localizedDescription, message: code)
@@ -484,6 +489,19 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                 self.viewWillAppear(true)
             }
         )
+    }
+
+    private func openWhatsApp(phoneNumber: String, message: String) {
+        let urlString = "whatsapp://send?phone=\(phoneNumber)&text=\(message.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "")"
+
+        if let url = URL(string: urlString) {
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            else {
+                print("WhatsApp is not installed on this device.")
+            }
+        }
     }
 
     private func showAlert(title: String, message: String) {

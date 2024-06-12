@@ -15,6 +15,7 @@ struct Participant: Hashable {
     let entry: Bool
     let mainFood: Bool
     let snack: Bool
+    let phone: String
 
     static func == (lhs: Participant, rhs: Participant) -> Bool {
         return lhs.documentID == rhs.documentID
@@ -26,7 +27,6 @@ struct Participant: Hashable {
 }
 
 class ParticipantUtil {
-
     static func parseToSet(_ documents: [QueryDocumentSnapshot]) -> Set<Participant> {
         return Set(documents.compactMap { document in
             let data = document.data()
@@ -46,9 +46,10 @@ class ParticipantUtil {
               let participantKit = data["participantKit"] as? Bool,
               let entry = data["entry"] as? Bool,
               let mainFood = data["mainFood"] as? Bool,
-              let snack = data["snack"] as? Bool else {
+              let snack = data["snack"] as? Bool
+        else {
             return nil
         }
-        return Participant(documentID: documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack)
+        return Participant(documentID: documentID, name: name, participantKit: participantKit, entry: entry, mainFood: mainFood, snack: snack, phone: data["phone"] as? String ?? "")
     }
 }
