@@ -293,19 +293,20 @@ class DetailViewController: UIViewController {
         let img = qrImageView.image
         let name = nameLabel.text ?? ""
         let messageStr = """
-            Halo \(name)!
+            Halo \(name)
 
-            Kami dengan senang hati mengundang Anda untuk menghadiri *MODA Family Day 2024* yang akan diselenggarakan di 
-                *Trans Studio Cibubur*
-                *27 Juli 2024*
-            Mari kita bersama-sama merayakan hari yang penuh kegembiraan, kebersamaan, dan kenangan indah.
+            Dalam rangka Family Day dan HUT MODA yang ke 2, kita akan melaksanakan kegiatan rekreasi bersama seluruh karyawan tetap MODA dan keluarganya yang akan dilaksanakan pada :
 
-            Silakan bawa QR Code berikut sebagai tiket masuk Anda. Kami tidak sabar untuk melihat Anda di sana dan berbagi momen istimewa bersama seluruh keluarga MODA!
+            🗓 Sabtu, 27 Juli 2024
+            🕟 08.30 - 17:00
+            (keberangkatan pukul 5:30/6:00)
+            📌 Trans Studio Cibubur
 
-            Sampai jumpa di acara!
+            Mari meriahkan MODA Family Day & HUT MODA yang ke 2 dengan tema "Two Years Among the Stars"  💫⭐
 
-            Salam hangat,
-            Keluarga MODA
+            Notes: Mohon pesan ini untuk tidak dibagikan ke siapapun
+
+            #ModaFamilyDay2024 #TwoYearsAmongtheStars
             """
         let activityViewController:UIActivityViewController = UIActivityViewController(activityItems:  [img!, messageStr], applicationActivities: nil)
         activityViewController.excludedActivityTypes = [.postToWeibo, .postToTwitter, .postToVimeo, .postToFlickr, . postToFacebook]
