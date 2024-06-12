@@ -537,7 +537,7 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         try await docRef.updateData([fieldName: true])
         addTransaction(
             transaction: Transaction(
-                transactionType: "scan",
+                transactionType: .scan,
                 participantName: name,
                 transactionDetails: [fieldName: true]
             )

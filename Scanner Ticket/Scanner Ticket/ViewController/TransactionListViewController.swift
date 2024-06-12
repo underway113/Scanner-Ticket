@@ -65,7 +65,7 @@ class TransactionListViewController: UIViewController {
             } else {
                 self.transactions = querySnapshot?.documents.compactMap { document -> Transaction? in
                     let data = document.data()
-                    return Transaction(transactionType: data["transactionType"] as! String,
+                    return Transaction(transactionType: TransactionTypeEnum(rawValue: data["transactionType"] as! String)!,
                                        participantName: data["participantName"] as! String,
                                        transactionDetails: data["transactionDetails"] as! [String: Any],
                                        timestamp: data["timestamp"] as! Timestamp)

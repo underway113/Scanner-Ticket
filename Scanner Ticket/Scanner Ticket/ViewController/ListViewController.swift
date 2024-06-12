@@ -373,7 +373,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let participant = self.getSortedFilteredParticipant(at: indexPath.row)
         guard getDisplayValue(for: participant) == false else { return nil }
-        let scanAction = UIContextualAction(style: .destructive, title: "Scan") { [weak self] (action, view, completionHandler) in
+        let scanAction = UIContextualAction(style: .destructive, title: "") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
             Task {
                 do {
@@ -388,10 +388,11 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         }
+
+        scanAction.image = UIImage.tintedQRCodeImage()
         scanAction.backgroundColor = .systemBlue
 
         let configuration = UISwipeActionsConfiguration(actions: [scanAction])
-        configuration.performsFirstActionWithFullSwipe = true
         return configuration
     }
 
@@ -399,7 +400,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let participant = self.getSortedFilteredParticipant(at: indexPath.row)
         guard getDisplayValue(for: participant) == true else { return nil }
-        let unscanAction = UIContextualAction(style: .destructive, title: "Unscan") { [weak self] (action, view, completionHandler) in
+        let unscanAction = UIContextualAction(style: .destructive, title: "") { [weak self] (action, view, completionHandler) in
             guard let self = self else { return }
             Task {
                 do {
@@ -415,10 +416,11 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
                 }
             }
         }
+
+        unscanAction.image = UIImage.tintedXSquareImage()
         unscanAction.backgroundColor = .systemRed
 
         let configuration = UISwipeActionsConfiguration(actions: [unscanAction])
-        configuration.performsFirstActionWithFullSwipe = true
         return configuration
     }
 
@@ -431,7 +433,7 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
         try await docRef.updateData([fieldName: value])
         addTransaction(
             transaction: Transaction(
-                transactionType: "swipe",
+                transactionType: .swipe,
                 participantName: name,
                 transactionDetails: [fieldName: value]
             )

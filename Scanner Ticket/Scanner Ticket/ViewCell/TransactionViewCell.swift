@@ -77,23 +77,16 @@ class TransactionViewCell: UITableViewCell {
         dateFormatter.dateFormat = "HH:mm:ss"
         timeLabel.text = dateFormatter.string(from: transaction.timestamp.dateValue())
 
-        var tintColor = UIColor.systemGreen
-        var image = UIImage(systemName: "qrcode.viewfinder")
-        if transaction.transactionType == "add" {
-            tintColor = .systemGreen
-            image = UIImage(systemName: "plus.app.fill")
+        switch transaction.transactionType {
+        case .add:
+            iconImageView.image = UIImage.tintedPlusAppImage(color: .systemGreen)
+        case .scan:
+            iconImageView.image = UIImage.tintedQRCodeImage(color: .systemGreen)
+        case .update:
+            iconImageView.image = UIImage.tintedPencilCircleImage(color: .systemBlue)
+        case .swipe:
+            iconImageView.image = UIImage.tintedHandDrawImage(color: .systemBlue)
         }
-        else if transaction.transactionType == "update" {
-            tintColor = .systemBlue
-            image = UIImage(systemName: "pencil.circle")
-        }
-        else if transaction.transactionType == "swipe" {
-            tintColor = .systemBlue
-            image = UIImage(systemName: "hand.draw")
-        }
-
-        iconImageView.tintColor = tintColor
-        iconImageView.image = image
 
         let attributedString = NSMutableAttributedString()
 

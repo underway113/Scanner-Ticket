@@ -8,20 +8,27 @@
 import Foundation
 import FirebaseFirestoreInternal
 
+
+enum TransactionTypeEnum: String {
+    case add = "add"
+    case scan = "scan"
+    case update = "update"
+    case swipe = "swipe"
+}
 struct Transaction {
-    let transactionType: String
+    let transactionType: TransactionTypeEnum
     let participantName: String
     let transactionDetails: [String: Any]
     let timestamp: Timestamp
 
-    init(transactionType: String, participantName: String, transactionDetails: [String: Any]) {
+    init(transactionType: TransactionTypeEnum, participantName: String, transactionDetails: [String: Any]) {
         self.transactionType = transactionType
         self.participantName = participantName
         self.transactionDetails = transactionDetails
         self.timestamp = Timestamp(date: Date())
     }
     
-    init(transactionType: String, participantName: String, transactionDetails: [String: Any], timestamp: Timestamp) {
+    init(transactionType: TransactionTypeEnum, participantName: String, transactionDetails: [String: Any], timestamp: Timestamp) {
         self.transactionType = transactionType
         self.participantName = participantName
         self.transactionDetails = transactionDetails
@@ -30,7 +37,7 @@ struct Transaction {
 
     func toDictionary() -> [String: Any] {
         return [
-            "transactionType": transactionType,
+            "transactionType": transactionType.rawValue,
             "participantName": participantName,
             "transactionDetails": transactionDetails,
             "timestamp": timestamp
@@ -53,6 +60,6 @@ class TransactionUtil {
               let timestamp = data["timestamp"] as? Timestamp else {
             return nil
         }
-        return Transaction(transactionType: transactionType, participantName: participantName, transactionDetails: transactionDetails, timestamp: timestamp)
+        return Transaction(transactionType: TransactionTypeEnum(rawValue: transactionType) ?? .update, participantName: participantName, transactionDetails: transactionDetails, timestamp: timestamp)
     }
 }

@@ -206,7 +206,7 @@ class DetailViewController: UIViewController {
             ]
             addTransaction(
                 transaction: Transaction(
-                    transactionType: "add",
+                    transactionType: .add,
                     participantName: name,
                     transactionDetails: dataTransaction
                 )
@@ -232,7 +232,7 @@ class DetailViewController: UIViewController {
             }
             addTransaction(
                 transaction: Transaction(
-                    transactionType: "update",
+                    transactionType: .update,
                     participantName: name,
                     transactionDetails: dataTransaction
                 )
