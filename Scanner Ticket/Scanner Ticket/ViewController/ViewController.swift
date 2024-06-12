@@ -475,9 +475,9 @@ class ViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
                         self.playSuccessSound()
                         AlertManager.showSuccessPopup(message: name) {
                             self.viewWillAppear(true)
-                            if let phone = participant["phone"] as? String {
-                                self.openWhatsApp(phoneNumber: phone, message: "You have successfully checked-in \(ticketType.uppercased()). Thank you")
-                            }
+//                            if let phone = participant["phone"] as? String {
+//                                self.openWhatsApp(phoneNumber: phone, message: "You have successfully checked-in \(ticketType.uppercased()). Thank you")
+//                            }
                         }
                     } catch {
                         self.showAlert(title: error.localizedDescription, message: code)
